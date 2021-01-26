@@ -1,6 +1,13 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
+import { component } from "vue/types/umd";
 import Home from "../views/Home.vue";
+import About from "../views/About.vue";
+import Selection from "../views/Selection.vue";
+import Description from "../views/Description.vue";
+import Test from "../views/Test.vue";
+import Score from "../views/Score.vue";
+import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -13,11 +20,51 @@ const routes: Array<RouteConfig> = [
   {
     path: "/about",
     name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    component: About
+  },
+  {
+    path: "/main/:exerciseId",
+    name: "ExerciseMain",
+    component: Description
+  },
+  {
+    path: "/sel/:exerciseId",
+    name: "ExerciseSel",
+    component: Selection
+  },
+  {
+    path: "/guide/:exerciseId/:contentId",
+    name: "ContentMain",
+    component: Description
+  },
+  {
+    path: "/connect/:exerciseId/:contentId",
+    name: "Connect",
+    component: Test
+  },
+  {
+    path: "/practice/:exerciseId/:contentId",
+    name: "Practice",
+    component: Test
+  },
+  {
+    path: "/test/:exerciseId/:contentId",
+    name: "Test",
+    component: Test
+  },
+  {
+    path: "/score/:exerciseId/:contentId",
+    name: "Score",
+    component: Score
+  },
+  {
+    path: "/404",
+    name: "NotFound",
+    component: NotFound
+  },
+  {
+    path: "*",
+    redirect: "/404"
   }
 ];
 
