@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
+import AxiosService from '../axios/index'
 
 @Component
 export default class Header extends Vue{
@@ -45,7 +46,7 @@ export default class Header extends Vue{
     menuType = 0;
     active = 0;
 
-    created(){
+    async created(){
       console.log(this.curUrl.name)
 
       if(this.curUrl.name == "Home"){
@@ -57,6 +58,7 @@ export default class Header extends Vue{
         this.menuType = 1;
       } else {
         this.title = "운동" // axios를 사용하여 타이틀을 알아와야 됨
+        //this.title = await AxiosService.instance.get(url: `${}`)
         this.menuType = 2;
 
         if(this.curUrl.name == "ExerciseMain") this.active = 0;
