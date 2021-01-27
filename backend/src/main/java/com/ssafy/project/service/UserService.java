@@ -45,7 +45,6 @@ public class UserService {
 		Optional<User> e = repo.findById(id); 
 		if (e.isPresent()) { 
 			e.get().setName(user.getName());
-			e.get().setPassword(user.getPassword());
 			repo.save(user); 
 		}
 		else {
