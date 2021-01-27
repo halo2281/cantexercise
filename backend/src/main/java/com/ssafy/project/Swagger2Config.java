@@ -30,11 +30,10 @@ public class Swagger2Config {
 	
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("제목")
-				.version("버전")
-				.description("설명")
-				.license("라이센스")
-				.licenseUrl("Url")
+				.title("공통 프로젝트")
+				.version("버전 입력")
+				.description("설명 입력")
+				.licenseUrl("Url 입력")
 				.build();
 	}
 	
