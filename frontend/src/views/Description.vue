@@ -1,11 +1,89 @@
 <template>
   <!-- 소개, 가이드 페이지로 사용 -->
-  <div>description</div>
+  <v-container>
+    <v-img 
+      class="ml-auto mr-auto mt-10"
+      lazy-src="https://picsum.photos/id/11/10/6"
+      height="400"
+      width="400"
+      src="https://picsum.photos/id/11/500/300"
+    >
+    </v-img>
+
+    <v-alert
+      class="mt-5 mr-auto ml-auto"
+      border="left"
+      colored-border
+      color="deep-purple accent-4"
+      elevation="2"
+      max-width="1200"
+      v-for="(article, idx) in articles" :key="idx"
+    >
+      <div class="title">
+        {{article[0]}}
+      </div>
+      <div>{{article[1]}}</div>
+    </v-alert>
+
+    <v-row
+      class="mt-5"
+      align="center"
+      justify="space-between"
+    >
+      <v-btn
+        :href="this.prevUrl"
+        text
+      >
+        <v-icon>mdi-chevron-left</v-icon>
+        <span class="mr-2">prev</span>
+      </v-btn>
+
+      <v-btn
+        :href="this.nextUrl"
+        text
+      >
+        <span class="mr-2">next</span>
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+    </v-row>
+  </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {Component, Vue} from 'vue-property-decorator'
+import AxiosService from '../axios/index'
+
+@Component
+export default class Description extends Vue {
     // 페이지 생성 시 DB에서 최상위, 최하위에 해당하는 대표 이미지와 설명들을 가져옴
+    image = "";
+    articles: [string, string][] = [];
+    curUrlName = this.$route.name;
+    prevUrl = "";
+    nextUrl = "";
+
+    async created(){
+      console.log(this.curUrlName);
+      if(this.curUrlName == "ExerciseMain") {
+        const exerciseId = this.$route.params.exerciseId;
+        console.log(exerciseId);
+        this.prevUrl = `/`;
+        this.nextUrl = `/sel/${exerciseId}`
+      } else {
+        const exerciseId = this.$route.params.exerciseId;
+        const contentId = this.$route.params.contentId;
+        console.log(exerciseId);
+        console.log(contentId);
+        this.prevUrl = `/sel/${exerciseId}`;
+        this.nextUrl = `/connect/${exerciseId}/${contentId}`
+      }
+
+      this.articles.push(["제목1", "테스트해볼려고"]);
+      this.articles.push(["제목2", "그냥 아무렇게나"]);
+      this.articles.push(["제목3", "써보는 말입니다."]);
+
+      // axios에서 대표 이미지와 설명글들 가져오는 부분 구현 필요   
+    }
 }
 </script>
 
