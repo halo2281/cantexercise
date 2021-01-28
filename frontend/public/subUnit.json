@@ -1,0 +1,38 @@
+[
+  {
+    "subUnitId": 1001,
+    "primarys": 2,
+    "title": "제자리뛰기",
+    "image": null
+  },
+  {
+    "subUnitId": 1002,
+    "primarys": 2,
+    "title": "가위뛰기",
+    "image": null
+  },
+  {
+    "subUnitId": 1003,
+    "primarys": 3,
+    "title": "작은 공 멀리 던지기",
+    "image": null
+  },
+  {
+    "subUnitId": 1004,
+    "primarys": 3,
+    "title": "더 멀리 던지는 방법",
+    "image": null
+  },
+  {
+    "subUnitId": 1005,
+    "primarys": 3,
+    "title": "큰 공 멀리 던지기",
+    "image": null
+  },
+  {
+    "subUnitId": 1006,
+    "primarys": 3,
+    "title": "포환 멀리 던지기",
+    "image": null
+  }
+]
