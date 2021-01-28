@@ -1,0 +1,156 @@
+[
+  {
+    "detailId": 10001,
+    "unit": 1001,
+    "title": "무릎의 움직임 익히기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10002,
+    "unit": 1001,
+    "title": "팔을 휘둘러 몸의 움직임 익히기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10003,
+    "unit": 1002,
+    "title": "가위뛰기의 다리 움직임 익히기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10011,
+    "unit": 1003,
+    "title": "손목의 힘을 이용하여 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10012,
+    "unit": 1003,
+    "title": "어깨를 이용하여 던지기",
+    "posture": "일어선 상태로 팔을 등뒤로 보낸 후 어깨를 이용하여 공을 던진다",
+    "objective": "어깨를 이용해 던짐으로써 공을 멀리 던지기 위한 원리와 올바른 기능을 습득하는 것",
+    "tip": "다리를 모으고 서면 어깨를 자유롭게 움직일 수 있다. 자연스럽게 자세가 커지고 공에 충격을 전달할 시간이 더 길어져서, 공에 더 큰 힘을 보낼 수 있다",
+    "guideImage": null,
+    "iotManual": "손등이 보이게 손을 놓은 후 손목에 센서를 장착합니다",
+    "iotImage": null
+  },
+  {
+    "detailId": 10013,
+    "unit": 1003,
+    "title": "허리와 어깨를 이용하여 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10004,
+    "unit": 1004,
+    "title": "제자리 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10005,
+    "unit": 1004,
+    "title": "한발 내딛으며 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10006,
+    "unit": 1004,
+    "title": "도움닫기 하여 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10007,
+    "unit": 1005,
+    "title": "머리 위로 양손 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10009,
+    "unit": 1005,
+    "title": "한 손 밀어 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10008,
+    "unit": 1006,
+    "title": "제자리에서 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10010,
+    "unit": 1006,
+    "title": "회전력을 이용하여 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  },
+  {
+    "detailId": 10020,
+    "unit": 1006,
+    "title": "도움닫기를 이용하여 던지기",
+    "posture": "자세",
+    "objective": "목표",
+    "tip": "팁",
+    "guideImage": null,
+    "iotManual": "메뉴얼",
+    "iotImage": null
+  }
+]
