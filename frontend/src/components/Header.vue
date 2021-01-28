@@ -37,6 +37,7 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
 import AxiosService from '../axios/index'
+import { AxiosResponse } from 'axios';
 
 @Component
 export default class Header extends Vue{
@@ -59,6 +60,7 @@ export default class Header extends Vue{
       } else {
         this.title = "운동" // axios를 사용하여 타이틀을 알아와야 됨
         //this.title = await AxiosService.instance.get(url: `${}`)
+
         this.menuType = 2;
 
         if(this.curUrl.name == "ExerciseMain") this.active = 0;
@@ -68,6 +70,26 @@ export default class Header extends Vue{
         else if(this.curUrl.name == "Practice") this.active = 4;
         else if(this.curUrl.name == "Test") this.active = 5;
         else if(this.curUrl.name == "Score") this.active = 6;
+
+        if(this.active < 2){
+          const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get('/mainUnit.json');
+          
+          for(const i in mainUnit.data){
+              //console.log(mainUnit.data[i])
+              if(mainUnit.data[i].mainUnitId == this.curUrl.params.exerciseId){
+                  this.title = mainUnit.data[i].title;
+              }
+          }
+        } else {
+          const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
+          
+          for(const i in detail.data){
+              //console.log(mainUnit.data[i])
+              if(detail.data[i].detailId == this.curUrl.params.contentId){
+                  this.title = detail.data[i].title;
+              }
+          }
+        }
       }
     }
     
