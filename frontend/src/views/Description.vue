@@ -3,10 +3,9 @@
   <v-container>
     <v-img 
       class="ml-auto mr-auto mt-10"
-      lazy-src="https://picsum.photos/id/11/10/6"
       height="400"
       width="400"
-      src="https://picsum.photos/id/11/500/300"
+      :src='image'
     >
     </v-img>
 
@@ -52,6 +51,7 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
 import AxiosService from '../axios/index'
+import { AxiosResponse } from 'axios';
 
 @Component
 export default class Description extends Vue {
@@ -62,26 +62,46 @@ export default class Description extends Vue {
     prevUrl = "";
     nextUrl = "";
 
+   
+
     async created(){
       console.log(this.curUrlName);
       if(this.curUrlName == "ExerciseMain") {
         const exerciseId = this.$route.params.exerciseId;
-        console.log(exerciseId);
         this.prevUrl = `/`;
         this.nextUrl = `/sel/${exerciseId}`
+        const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get('/mainUnit.json');
+       
+        for(const i in mainUnit.data){
+            //console.log(mainUnit.data[i])
+            if(mainUnit.data[i].mainUnitId == exerciseId){
+                this.articles.push(["소개글", mainUnit.data[i].intro ]);
+                this.articles.push(["향상 능력", mainUnit.data[i].improvement ]);
+                this.image = require(`@/assets/images/mainUnit/${mainUnit.data[i].mainUnitId}.jpg`)
+            }
+        }
+
       } else {
         const exerciseId = this.$route.params.exerciseId;
         const contentId = this.$route.params.contentId;
-        console.log(exerciseId);
-        console.log(contentId);
+        
         this.prevUrl = `/sel/${exerciseId}`;
         this.nextUrl = `/connect/${exerciseId}/${contentId}`
+
+        const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
+       
+        for(const i in detail.data){
+            // console.log(detail.data[i])
+            if(detail.data[i].detailId == contentId){
+                this.articles.push(["목표", detail.data[i].objective]);
+                this.articles.push(["자세", detail.data[i].posture ]);
+                this.articles.push(["Tip", detail.data[i].tip ]);
+                this.image = require(`@/assets/images/detail/${detail.data[i].detailId}.jpg`)
+            }
+        }
       }
 
-      this.articles.push(["제목1", "테스트해볼려고"]);
-      this.articles.push(["제목2", "그냥 아무렇게나"]);
-      this.articles.push(["제목3", "써보는 말입니다."]);
-
+      
       // axios에서 대표 이미지와 설명글들 가져오는 부분 구현 필요   
     }
 }
