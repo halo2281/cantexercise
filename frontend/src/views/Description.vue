@@ -86,7 +86,3 @@ export default class Description extends Vue {
     }
 }
 </script>
-
-<style>
-
-</style>
