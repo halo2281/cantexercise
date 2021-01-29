@@ -1,6 +1,5 @@
 package com.ssafy.project.dto;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,15 +11,15 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-public class User {
-
+public class FeedBack {
+	
 	@Id
-	@Column(name = "userId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-
-	private String name; // 이름
-	private String school; // 학교
-	private Integer grade; // 학년
-
+	private Integer feedbackId;
+	
+	// ---FK---
+	// --------
+	
+	private Integer score;
+	private String comment;
 }
