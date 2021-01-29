@@ -62,10 +62,8 @@ export default class Description extends Vue {
     prevUrl = "";
     nextUrl = "";
 
-   
-
     async created(){
-      console.log(this.curUrlName);
+      //console.log(this.curUrlName);
       if(this.curUrlName == "ExerciseMain") {
         const exerciseId = this.$route.params.exerciseId;
         this.prevUrl = `/`;

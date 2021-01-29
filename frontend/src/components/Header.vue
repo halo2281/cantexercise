@@ -35,48 +35,55 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator'
+import {Component, Vue, Watch} from 'vue-property-decorator'
 import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
 
 @Component
 export default class Header extends Vue{
     title = "";
-    curUrl = this.$route;
+    curUrlName = this.$route.name;
     menus: string[] = ["소개", "선택", "가이드", "연결", "연습", "실습", "점수"];
     menuType = 0;
     active = 0;
 
-    async created(){
-      console.log(this.curUrl.name)
+    @Watch('curUrlName')
+    update(){
+        this.setTypeAndActive()
+    }
 
-      if(this.curUrl.name == "Home"){
+    async mounted(){
+      console.log(this.curUrlName)
+      this.setTypeAndActive()
+      console.log(this.active)
+    }
+
+    async setTypeAndActive(){
+      if(this.curUrlName == "Home"){
         this.title = "온라인 체육 학습 플랫폼"
-      } else if(this.curUrl.name == "About"){
+      } else if(this.curUrlName == "About"){
         this.title = "도움말"
-      } else if(this.curUrl.name == "User"){
+      } else if(this.curUrlName == "User"){
         this.title = "마이 페이지"
         this.menuType = 1;
       } else {
-        this.title = "운동" // axios를 사용하여 타이틀을 알아와야 됨
-        //this.title = await AxiosService.instance.get(url: `${}`)
 
         this.menuType = 2;
 
-        if(this.curUrl.name == "ExerciseMain") this.active = 0;
-        else if(this.curUrl.name == "ExerciseSel") this.active = 1;
-        else if(this.curUrl.name == "ContentMain") this.active = 2;
-        else if(this.curUrl.name == "Connect") this.active = 3;
-        else if(this.curUrl.name == "Practice") this.active = 4;
-        else if(this.curUrl.name == "Test") this.active = 5;
-        else if(this.curUrl.name == "Score") this.active = 6;
+        if(this.curUrlName == "ExerciseMain") this.active = 0;
+        else if(this.curUrlName == "ExerciseSel") this.active = 1;
+        else if(this.curUrlName == "ContentMain") this.active = 2;
+        else if(this.curUrlName == "Connect") this.active = 3;
+        else if(this.curUrlName == "Practice") this.active = 4;
+        else if(this.curUrlName == "Test") this.active = 5;
+        else if(this.curUrlName == "Score") this.active = 6;
 
         if(this.active < 2){
           const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get('/mainUnit.json');
           
           for(const i in mainUnit.data){
               //console.log(mainUnit.data[i])
-              if(mainUnit.data[i].mainUnitId == this.curUrl.params.exerciseId){
+              if(mainUnit.data[i].mainUnitId == this.$route.params.exerciseId){
                   this.title = mainUnit.data[i].title;
               }
           }
@@ -85,13 +92,15 @@ export default class Header extends Vue{
           
           for(const i in detail.data){
               //console.log(mainUnit.data[i])
-              if(detail.data[i].detailId == this.curUrl.params.contentId){
+              if(detail.data[i].detailId == this.$route.params.contentId){
                   this.title = detail.data[i].title;
               }
           }
         }
       }
     }
+
+    
     
 }
 </script>

@@ -13,24 +13,48 @@
         :key="idx"
         v-slot="{ active }"
       >
-        <v-card 
-          :color="active ? undefined : 'grey'"
-          class="ml-5 mr-5 mt-5"
-          height="250"
-          width="300"
-          @click="sendSig(article[2])"
-        >
-
-          <v-img
-           height="270"
-           :src='article[0]'
-           alt = "../assets/images/mainUnit/3.PNG"
-           class="balck--text align-end"
+        <div v-if= "depth < 3">
+          <v-card 
+            :color="active ? undefined : 'grey'"
+            class="ml-5 mr-5 mt-5"
+            height="250"
+            width="300"
+            @click="sendSig(article[2])"
           >
-            <v-card-title
-            >{{article[1]}}</v-card-title>
-          </v-img>
-        </v-card>
+
+            <v-img
+             height="270"
+             :src='article[0]'
+             alt = "../assets/images/mainUnit/3.PNG"
+             class="balck--text align-end"
+            >
+              <v-card-title
+              >{{article[1]}}</v-card-title>
+            </v-img>
+          </v-card>
+        </div>
+
+        <div v-else>
+          <v-card 
+            :color="active ? undefined : 'grey'"
+            class="ml-5 mr-5 mt-5"
+            height="250"
+            width="300"
+            :href = curUrl+article[2]
+          >
+  
+            <v-img
+             height="270"
+             :src='article[0]'
+             alt = "../assets/images/mainUnit/3.PNG"
+             class="balck--text align-end"
+            >
+              <v-card-title
+              >{{article[1]}}</v-card-title>
+            </v-img>
+          </v-card>
+        </div>
+
       </v-slide-item>  
     </v-slide-group>
   </div>
@@ -48,6 +72,7 @@ export default class SliderList extends Vue {
 
   title = "";
   articles:[string, string, number][] = [];
+  curUrl = `/guide/${this.$route.params.exerciseId}/`
 
   async mounted(){
     //   props에서 받아온 아이디를 통해
@@ -140,7 +165,7 @@ export default class SliderList extends Vue {
           // router를 이용하여 /guide/exerciseId/contetnId로 이동 
           const exerciseId = this.$route.params.exerciseId;
           const contentId = id;
-          this.$router.push(`/guide/${exerciseId}/${contentId}`)
+          //this.$router.push(`/guide/${exerciseId}/${contentId}`)
       } else {
           // emit을 이용하여 SliderList를 추가해야 한다는 신호를 보냄
           // 현재 depth와 id를 보냄
