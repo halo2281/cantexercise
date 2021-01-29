@@ -1,3 +1,3 @@
-const API_BASE_URL: string = "http://localhost:8000/board";
+const API_BASE_URL = "http://localhost:8080";
 
 export { API_BASE_URL };
