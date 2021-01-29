@@ -4,10 +4,10 @@
   <v-container>
     <v-img 
       class="ml-auto mr-auto mt-10"
-      lazy-src="https://picsum.photos/id/11/10/6"
       height="400"
       width="400"
-      src="https://picsum.photos/id/11/500/300"
+      :src="image" 
+      contain
     >
     </v-img>
 
@@ -23,7 +23,8 @@
       <div class="title">
         {{article[0]}}
       </div>
-      <div>{{article[1]}}</div>
+      <v-divider></v-divider>
+      <div class="mt-5">{{article[1]}}</div>
     </v-alert>
 
     <v-row
@@ -53,6 +54,7 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
 import AxiosService from '../axios/index'
+import { AxiosResponse } from 'axios';
 
 @Component
 export default class Test extends Vue {
@@ -68,24 +70,49 @@ export default class Test extends Vue {
   nextUrl = "";
 
   async created(){
-    console.log(this.curUrlName);
+    // console.log(this.curUrlName);
     const exerciseId = this.$route.params.exerciseId;
     const contentId = this.$route.params.contentId;
-    console.log(exerciseId);
-    console.log(contentId);
+    // console.log(exerciseId);
+    // console.log(contentId);
 
     if(this.curUrlName == "Connect") { 
       this.prevUrl = `/guide/${exerciseId}/${contentId}`;
-      this.nextUrl = `/practice/${exerciseId}/${contentId}`
-      this.articles.push(["장비 착용 가이드","IoT 장비를 착용해야 되는 경우 착용 방법 및 부위에 대한 설명 제공 예정"])
-      this.articles.push(["영상 촬영 가이드","이미지를 통한 비교에서 영상 촬영 시 적절항 이미지가 나올 수 있도록 가이드"])
+      this.nextUrl = `/practice/${exerciseId}/${contentId}`;
+      const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
+       
+      for(const i in detail.data){
+          //console.log(mainUnit.data[i])
+          if(detail.data[i].detailId == contentId){
+              this.articles.push(["장비 착용 가이드", detail.data[i].iotManual]);
+              this.image = require(`@/assets/images/connect/${detail.data[i].detailId}.jpg`)
+          }
+      } 
     } else if(this.curUrlName == "Practice") {
       this.prevUrl = `/connect/${exerciseId}/${contentId}`;
       this.nextUrl = `/test/${exerciseId}/${contentId}`
+      const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
+
+      for(const i in detail.data){
+          //console.log(mainUnit.data[i])
+          if(detail.data[i].detailId == contentId){
+              this.image = require(`@/assets/images/detail/${detail.data[i].detailId}.jpg`)
+          }
+      } 
+
       this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
     } else if(this.curUrlName == "Test") {
       this.prevUrl = `/practice/${exerciseId}/${contentId}`;
       this.nextUrl = `/score/${exerciseId}/${contentId}`
+      const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
+
+      for(const i in detail.data){
+          //console.log(mainUnit.data[i])
+          if(detail.data[i].detailId == contentId){
+              this.image = require(`@/assets/images/detail/${detail.data[i].detailId}.jpg`)
+          }
+      }
+
       this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
     }
 
