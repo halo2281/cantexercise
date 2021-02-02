@@ -23,15 +23,12 @@ public class UserService {
 	
 	// 전체 회원 조회
 	public List<User> findAll(){
-		//List<User> users = new ArrayList<>();
-		//repo.findAll().forEach(e->users.add(e));
 		return repo.findAll();
 	}
 	
 	// 특정 회원 조회
 	public Optional<User> findById(Integer id) { 
 		Optional<User> user = repo.findById(id); 
-		System.out.println("findbyId 호출");
 		return user; 
 	} 
 	
@@ -40,15 +37,11 @@ public class UserService {
 		repo.deleteById(id); 
 	} 
 	
-	public void updateById(Integer id, User user) { 
-		Optional<User> e = repo.findById(id); 
-		if (e.isPresent()) { 
-			e.get().setName(user.getName());
-			repo.save(user); 
-		}
-		else {
-			System.out.println("Can't Find Object to Update");
-		}
-	}
+	/*
+	 * public void updateById(Integer id, User user) { Optional<User> e =
+	 * repo.findById(id); if (e.isPresent()) { e.get().setName(user.getName());
+	 * repo.save(user); } else { System.out.println("Can't Find Object to Update");
+	 * } }
+	 */
 	
 }

@@ -24,7 +24,7 @@ public class SubUnitController {
 
 	// 특정 대단원의 중단원 목록 조회
 	@GetMapping(value="/{primaryId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<List<SubUnit>> getSubUnitList(@PathVariable("primaryId") Integer primaryId) {
+	public ResponseEntity<List<SubUnit>> getSubUnitList(@PathVariable("primaryId") Long primaryId) {
 		List<SubUnit> list = service.findSubUnitList(primaryId);
 		if (list == null) {
 			return new ResponseEntity<List<SubUnit>>(new ArrayList<SubUnit>(), HttpStatus.NOT_FOUND);

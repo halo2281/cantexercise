@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.project.dto.MainUnit;
-import com.ssafy.project.dto.MainUnitResult;
+import com.ssafy.project.dto.MainUnitList;
+import com.ssafy.project.dto.MainUnitTitle;
 import com.ssafy.project.service.MainUnitService;
 
 @RestController
@@ -26,22 +26,22 @@ public class MainUnitController {
 	@Autowired
 	MainUnitService service;
 
-	// 대단원 목록 조회
+	// 전체 대단원 목록 조회
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<List<MainUnitResult>> getMainUnitList() {
-		List<MainUnitResult> list = service.findMainUnitList();
+	public ResponseEntity<List<MainUnitList>> getMainUnitList() {
+		List<MainUnitList> list = service.findMainUnitList();
 		if (list == null) {
-			return new ResponseEntity<List<MainUnitResult>>(new ArrayList<MainUnitResult>(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<MainUnitList>>(new ArrayList<MainUnitList>(), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<List<MainUnitResult>>(list, HttpStatus.OK);
+			return new ResponseEntity<List<MainUnitList>>(list, HttpStatus.OK);
 		}
 	}
 	
-	// 특정 대단원 조회
+	// 해당 대단원 제목
 	@GetMapping(value="/{mainId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<MainUnit> getMainUnit(@PathVariable("mainId") Integer id) {
-		Optional<MainUnit> unit = service.findMainUnit(id);
-		return new ResponseEntity<MainUnit>(unit.get(), HttpStatus.OK);
+	public ResponseEntity<MainUnitTitle> getMainUnitTitle(@PathVariable("mainId") Long id) {
+		Optional<MainUnitTitle> unit = service.findMainUnit(id);
+		return new ResponseEntity<MainUnitTitle>(unit.get(), HttpStatus.OK);
 
 	}
 

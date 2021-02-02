@@ -14,7 +14,7 @@ public class SubUnitService {
 	@Autowired
 	SubUnitRepository repo;
 	
-	public List<SubUnit> findSubUnitList(Integer primary){
+	public List<SubUnit> findSubUnitList(Long primary){
 		List<SubUnit> unitList = repo.findByUnitOf(primary);
 		return unitList;
 	}
