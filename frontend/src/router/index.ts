@@ -8,6 +8,7 @@ import Description from "../views/Description.vue";
 import Test from "../views/Test.vue";
 import Score from "../views/Score.vue";
 import NotFound from "../views/NotFound.vue";
+import Login from "../views/Login.vue"
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes: Array<RouteConfig> = [
     path: "/about",
     name: "About",
     component: About
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login
   },
   {
     path: "/main/:exerciseId",
