@@ -24,6 +24,7 @@ public class DetailService {
 		List<Detail> detailList = repo.findByUnitOf(unit);
 		List<DetailList> result = new ArrayList<>();
 		detailList.forEach(e -> result.add(new DetailList(
+					e.getDetailId(),
 					e.getTitle(),
 					e.getGuideImage()
 				)));

@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DetailList {	
+	private Long detailId;
 	private String title;
 	private String guideImage;
 

@@ -22,6 +22,7 @@ public class SubUnitService {
 		List<SubUnit> unitList = repo.findByUnitOf(primary);
 		List<SubUnitList> result = new ArrayList<SubUnitList>();
 		unitList.forEach(e -> result.add(new SubUnitList(
+				e.getSubUnitId(),
 				e.getTitle(),
 				e.getImage())));
 		return result;

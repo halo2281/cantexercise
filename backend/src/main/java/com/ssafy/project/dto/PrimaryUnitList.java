@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrimaryUnitList {
-
+	private Long primaryId;
 	private String title;
 	private String image;
 }
