@@ -55,6 +55,7 @@
 import {Component, Vue} from 'vue-property-decorator'
 import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
+import { io } from "socket.io-client"
 
 @Component
 export default class Test extends Vue {
@@ -68,6 +69,8 @@ export default class Test extends Vue {
   curUrlName = this.$route.name;
   prevUrl = "";
   nextUrl = "";
+  socket = io('http://localhost:3001')
+  msg = "hello from frontend..."
 
   async created(){
     // console.log(this.curUrlName);
@@ -75,48 +78,35 @@ export default class Test extends Vue {
     const contentId = this.$route.params.contentId;
     // console.log(exerciseId);
     // console.log(contentId);
+    const detail: AxiosResponse<[]> = await AxiosService.instance.get(`/detail/${contentId}`);
 
     if(this.curUrlName == "Connect") { 
       this.prevUrl = `/guide/${exerciseId}/${contentId}`;
       this.nextUrl = `/practice/${exerciseId}/${contentId}`;
-      const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
-       
-      for(const i in detail.data){
-          //console.log(mainUnit.data[i])
-          if(detail.data[i].detailId == contentId){
-              this.articles.push(["장비 착용 가이드", detail.data[i].iotManual]);
-              this.image = require(`@/assets/images/connect/${detail.data[i].detailId}.jpg`)
-          }
-      } 
+      
+      this.articles.push(["장비 착용 가이드", detail.data.iotManual]);
+      this.image = require(`@/assets/images/connect/${detail.data.detailId}.jpg`)
+
     } else if(this.curUrlName == "Practice") {
       this.prevUrl = `/connect/${exerciseId}/${contentId}`;
       this.nextUrl = `/test/${exerciseId}/${contentId}`
-      const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
 
-      for(const i in detail.data){
-          //console.log(mainUnit.data[i])
-          if(detail.data[i].detailId == contentId){
-              this.image = require(`@/assets/images/detail/${detail.data[i].detailId}.jpg`)
-          }
-      } 
-
+      this.image = require(`@/assets/images/detail/${detail.data.detailId}.jpg`) 
       this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
     } else if(this.curUrlName == "Test") {
       this.prevUrl = `/practice/${exerciseId}/${contentId}`;
       this.nextUrl = `/score/${exerciseId}/${contentId}`
-      const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
-
-      for(const i in detail.data){
-          //console.log(mainUnit.data[i])
-          if(detail.data[i].detailId == contentId){
-              this.image = require(`@/assets/images/detail/${detail.data[i].detailId}.jpg`)
-          }
-      }
-
+      
+      this.image = require(`@/assets/images/detail/${detail.data.detailId}.jpg`)
       this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
     }
 
-    // axios에서 대표 이미지와 설명글들 가져오는 부분 구현 필요   
+    // axios에서 대표 이미지와 설명글들 가져오는 부분 구현 필요  
+    }
+
+    mounted(){
+      console.log("send message");
+      this.socket.emit('SEND_MESSAGE', this.msg);
     }
 }
 </script>
