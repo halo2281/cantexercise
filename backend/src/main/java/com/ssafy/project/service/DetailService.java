@@ -47,7 +47,7 @@ public class DetailService {
 				unit.get().getIotManualImage(),
 				unit.get().getIotWearImage(),
 				unit.get().getIotExerciseImage(),
-				unit.get().getIotPraceticeImage()
+				unit.get().getIotPracticeImage()
 			);
 		
 		Optional<DetailResult> result = Optional.of(temp);
