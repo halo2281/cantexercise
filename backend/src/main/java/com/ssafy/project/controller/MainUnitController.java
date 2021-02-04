@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.project.dto.MainUnitList;
+import com.ssafy.project.dto.MainUnitResult;
 import com.ssafy.project.dto.MainUnitTitle;
 import com.ssafy.project.service.MainUnitService;
 
@@ -38,11 +39,18 @@ public class MainUnitController {
 	}
 	
 	// 해당 대단원 제목
-	@GetMapping(value="/{mainId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value="title/{mainId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<MainUnitTitle> getMainUnitTitle(@PathVariable("mainId") Long id) {
-		Optional<MainUnitTitle> unit = service.findMainUnit(id);
+		Optional<MainUnitTitle> unit = service.findMainUnitTitle(id);
 		return new ResponseEntity<MainUnitTitle>(unit.get(), HttpStatus.OK);
 
 	}
+	
+	// 해당 대단원 전체
+	@GetMapping(value="/{mainId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<MainUnitResult> getMainUnit(@PathVariable("mainId") Long id) {
+		Optional<MainUnitResult> unit = service.findMainUnit(id);
+		return new ResponseEntity<MainUnitResult>(unit.get(), HttpStatus.OK);
 
+	}
 }

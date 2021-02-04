@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubUnitList {
-
+	private Long subId;
 	private String title;
 	private String image;
 }

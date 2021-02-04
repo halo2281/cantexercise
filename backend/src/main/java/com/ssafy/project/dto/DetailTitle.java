@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DetailList {	
+public class DetailTitle {
 	private Long detailId;
 	private String title;
-	private String guideImage;
-
-}	
+}
