@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.project.dto.MainUnit;
 import com.ssafy.project.dto.MainUnitList;
+import com.ssafy.project.dto.MainUnitResult;
 import com.ssafy.project.dto.MainUnitTitle;
 import com.ssafy.project.repository.MainUnitRepository;
 
@@ -32,12 +33,29 @@ public class MainUnitService {
 	}
 
 	// 해당 대단원의 제목
-	public Optional<MainUnitTitle> findMainUnit(Long id) {
+	public Optional<MainUnitTitle> findMainUnitTitle(Long id) {
 		Optional<MainUnit> unit = repo.findById(id);
 		
-		MainUnitTitle temp = new MainUnitTitle();
-		temp.setTitle(unit.get().getTitle());
+		MainUnitTitle temp = new MainUnitTitle(unit.get().getMainUnitId(), unit.get().getTitle());
 		Optional<MainUnitTitle> result = Optional.of(temp);
+		
+		return result;
+	}
+	
+	// 해당 대단원의 전체 내용
+	public Optional<MainUnitResult> findMainUnit(Long id) {
+		Optional<MainUnit> unit = repo.findById(id);
+		
+		MainUnitResult temp = new MainUnitResult(
+				unit.get().getMainUnitId(), 
+				unit.get().getSb().getBookId(), 
+				unit.get().getTitle(), 
+				unit.get().getIntro(),
+				unit.get().getImprovement(),
+				unit.get().getImage()
+			);
+		
+		Optional<MainUnitResult> result = Optional.of(temp);
 		
 		return result;
 	}

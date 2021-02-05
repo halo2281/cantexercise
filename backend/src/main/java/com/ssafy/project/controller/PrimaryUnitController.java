@@ -2,6 +2,7 @@ package com.ssafy.project.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.project.dto.PrimaryUnitList;
+import com.ssafy.project.dto.PrimaryUnitTitle;
 import com.ssafy.project.service.PrimaryUnitService;
 
 @RestController
@@ -31,5 +33,12 @@ public class PrimaryUnitController {
 		} else {
 			return new ResponseEntity<List<PrimaryUnitList>>(list, HttpStatus.OK);
 		}
+	}
+	
+	// 해당 중단원의 제목
+	@GetMapping(value="/title/{primaryId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<PrimaryUnitTitle> getPrimaryUnitTitle(@PathVariable("primaryId") Long id){
+		Optional<PrimaryUnitTitle> unit = service.findPrimaryUnitTitle(id);
+		return new ResponseEntity<PrimaryUnitTitle>(unit.get(), HttpStatus.OK);
 	}
 }

@@ -2,12 +2,14 @@ package com.ssafy.project.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.project.dto.PrimaryUnit;
 import com.ssafy.project.dto.PrimaryUnitList;
+import com.ssafy.project.dto.PrimaryUnitTitle;
 import com.ssafy.project.repository.PrimaryUnitRepository;
 
 @Service
@@ -22,10 +24,19 @@ public class PrimaryUnitService {
 		
 		List<PrimaryUnitList> result = new ArrayList<>();
 		units.forEach(unit -> result.add(new PrimaryUnitList(
+				unit.getPriUnitId(),
 				unit.getTitle(),
 				unit.getImage()
 		)));
 		
+		return result;
+	}
+	
+	public Optional<PrimaryUnitTitle> findPrimaryUnitTitle(Long id) {
+		Optional<PrimaryUnit> unit = repo.findById(id);
+		
+		PrimaryUnitTitle temp = new PrimaryUnitTitle(unit.get().getPriUnitId(), unit.get().getTitle());
+		Optional<PrimaryUnitTitle> result = Optional.of(temp);
 		return result;
 	}
 }

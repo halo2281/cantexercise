@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.project.dto.Detail;
 
 @Repository
-public interface DetailRepository extends JpaRepository<Detail, Integer> {
+public interface DetailRepository extends JpaRepository<Detail, Long> {
 	@Query(value="select * from detail where unit=:id", nativeQuery=true)
-	List<Detail> findByUnitOf(@Param("id") Integer id);
+	List<Detail> findByUnitOf(@Param("id") Long id);
 }

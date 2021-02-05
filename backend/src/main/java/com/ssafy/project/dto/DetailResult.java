@@ -24,6 +24,6 @@ public class DetailResult {
 	private String iotManualImage;		// IoT 설정 이미지
 	private String iotWearImage;
 	private String iotExerciseImage;
-	private String iotPraceticeImage;
+	private String iotPracticeImage;
 
 }	

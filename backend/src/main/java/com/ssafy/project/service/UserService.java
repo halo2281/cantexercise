@@ -27,13 +27,13 @@ public class UserService {
 	}
 	
 	// 특정 회원 조회
-	public Optional<User> findById(Integer id) { 
+	public Optional<User> findById(Long id) { 
 		Optional<User> user = repo.findById(id); 
 		return user; 
 	} 
 	
 	
-	public void deleteById(Integer id) { 
+	public void deleteById(Long id) { 
 		repo.deleteById(id); 
 	} 
 	
