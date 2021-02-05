@@ -70,7 +70,7 @@ export default class Description extends Vue {
         this.nextUrl = `/sel/${exerciseId}`
         const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/mainUnit/${exerciseId}`);
 
-        console.log(mainUnit.data)
+        //console.log(mainUnit.data)
         this.articles.push(["소개글", mainUnit.data.intro ]);
         this.articles.push(["향상 능력", mainUnit.data.improvement ]);
         this.image = require(`@/assets/images/mainUnit/${mainUnit.data.mainUnitId}.jpg`)

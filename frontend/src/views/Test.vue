@@ -66,11 +66,11 @@ export default class Test extends Vue {
 
   image = "";
   articles: [string, string][] = [];
+  feedback: [string, string][] = [];
   curUrlName = this.$route.name;
   prevUrl = "";
   nextUrl = "";
-  socket = io('http://localhost:3001')
-  msg = "hello from frontend..."
+
 
   async created(){
     // console.log(this.curUrlName);
@@ -105,8 +105,34 @@ export default class Test extends Vue {
     }
 
     mounted(){
-      console.log("send message");
-      this.socket.emit('SEND_MESSAGE', this.msg);
+      // console.log("send message");
+      if(this.curUrlName != "Connect"){
+        //const socket = io('http://localhost:3001')
+        const socket = io('http://52.79.57.59:8083')
+
+        // 페이지가 마운트 되면 시작 신호를 보냄
+        //socket.emit("sendServer", "action start" )
+        socket.emit("frontToServer", "action start" )
+  
+        socket.on('serverToFront', (data)=>{
+          console.log(data)
+          console.log("actnum : " + data.actnum)
+          console.log("ispass : " + data.ispass)
+
+          const actNum = parseInt(data.actnum, 10) + 1;
+
+          let feedMsg = "";
+
+          if(data.ispass == "1") {
+            feedMsg += "성공하셨습니다. 다음 동작을 시작해주세요!"
+          } else {
+            feedMsg += `구분 동작 ${actNum}번 실패했습니다. 동작을 다시 해주세요.`
+          }
+
+          this.articles.pop()
+          this.articles.push(["피드백", feedMsg])
+        })
+      }
     }
 }
 </script>
