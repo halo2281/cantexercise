@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PrimaryUnitResult {
+public class PrimaryUnitResult {	
+
+	private Long priUnitId;
+
+	private Long main;
 	
-	private Integer priUnitId;
-	
-	private Integer main;
-	
-	private String title;
-	private String image;
+	private String title;			// 중단원 이름
+	private String image;			// 대표 이미지
 }

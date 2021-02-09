@@ -9,12 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubUnitResult {
-
+public class SubUnitTitle {
 	private Long subUnitId;
-
-	private Long primarys;
-	
 	private String title;
-	private String image;
 }

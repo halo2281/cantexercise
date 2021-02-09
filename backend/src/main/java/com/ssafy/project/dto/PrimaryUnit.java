@@ -19,7 +19,7 @@ public class PrimaryUnit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer priUnitId;
+	private Long priUnitId;
 	
 	@ManyToOne
 	@JoinColumn(name = "main")

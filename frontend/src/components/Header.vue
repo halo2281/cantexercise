@@ -79,23 +79,16 @@ export default class Header extends Vue{
         else if(this.curUrlName == "Score") this.active = 6;
 
         if(this.active < 2){
-          const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get('/mainUnit.json');
-          
-          for(const i in mainUnit.data){
-              //console.log(mainUnit.data[i])
-              if(mainUnit.data[i].mainUnitId == this.$route.params.exerciseId){
-                  this.title = mainUnit.data[i].title;
-              }
-          }
+          const mainUnit: AxiosResponse<[]> = await AxiosService.instance
+          .get(`/mainUnit/${this.$route.params.exerciseId}`);
+
+          this.title = mainUnit.data.title;
         } else {
-          const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
+          const detail: AxiosResponse<[]> = await AxiosService.instance
+          .get(`/detail/${this.$route.params.contentId}`);
           
-          for(const i in detail.data){
-              //console.log(mainUnit.data[i])
-              if(detail.data[i].detailId == this.$route.params.contentId){
-                  this.title = detail.data[i].title;
-              }
-          }
+          this.title = detail.data.title;
+
         }
       }
     }

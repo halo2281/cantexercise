@@ -68,17 +68,12 @@ export default class Description extends Vue {
         const exerciseId = this.$route.params.exerciseId;
         this.prevUrl = `/`;
         this.nextUrl = `/sel/${exerciseId}`
-        const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get('/mainUnit.json');
-       
-        for(const i in mainUnit.data){
-            //console.log(mainUnit.data[i])
-            if(mainUnit.data[i].mainUnitId == exerciseId){
-                this.articles.push(["소개글", mainUnit.data[i].intro ]);
-                this.articles.push(["향상 능력", mainUnit.data[i].improvement ]);
-                this.image = require(`@/assets/images/mainUnit/${mainUnit.data[i].mainUnitId}.jpg`)
-            }
-        }
+        const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/mainUnit/${exerciseId}`);
 
+        //console.log(mainUnit.data)
+        this.articles.push(["소개글", mainUnit.data.intro ]);
+        this.articles.push(["향상 능력", mainUnit.data.improvement ]);
+        this.image = require(`@/assets/images/mainUnit/${mainUnit.data.mainUnitId}.jpg`)
       } else {
         const exerciseId = this.$route.params.exerciseId;
         const contentId = this.$route.params.contentId;
@@ -86,17 +81,12 @@ export default class Description extends Vue {
         this.prevUrl = `/sel/${exerciseId}`;
         this.nextUrl = `/connect/${exerciseId}/${contentId}`
 
-        const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
+        const detail: AxiosResponse<[]> = await AxiosService.instance.get(`/detail/${contentId}`);
        
-        for(const i in detail.data){
-            // console.log(detail.data[i])
-            if(detail.data[i].detailId == contentId){
-                this.articles.push(["목표", detail.data[i].objective]);
-                this.articles.push(["자세", detail.data[i].posture ]);
-                this.articles.push(["Tip", detail.data[i].tip ]);
-                this.image = require(`@/assets/images/detail/${detail.data[i].detailId}.jpg`)
-            }
-        }
+        this.articles.push(["목표", detail.data.objective]);
+        this.articles.push(["자세", detail.data.posture ]);
+        this.articles.push(["Tip", detail.data.tip ]);
+        this.image = require(`@/assets/images/detail/${detail.data.detailId}.jpg`)
       }
 
       

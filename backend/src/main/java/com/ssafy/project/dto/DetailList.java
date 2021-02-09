@@ -9,12 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubUnitResult {
-
-	private Long subUnitId;
-
-	private Long primarys;
-	
+public class DetailList {	
+	private Long detailId;
 	private String title;
-	private String image;
-}
+	private String guideImage;
+
+}	

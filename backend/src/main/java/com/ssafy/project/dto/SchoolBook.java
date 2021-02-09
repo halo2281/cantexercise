@@ -15,9 +15,9 @@ public class SchoolBook {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer bookId;
+	private Long bookId;
 
 	private String bookname; // 교과서 이름
 	private String school; // 학교
-	private Integer grade; // 학년
+	private Long grade; // 학년
 }

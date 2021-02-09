@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.ssafy.project.dto.PrimaryUnit;
 
 @Repository
-public interface PrimaryUnitRepository extends JpaRepository<PrimaryUnit, Integer> {
+public interface PrimaryUnitRepository extends JpaRepository<PrimaryUnit, Long> {
 	
 	@Query(value="select * from primaryunit where main=:id", nativeQuery=true)
-	List<PrimaryUnit> findByUnitOf(@Param("id") Integer id);
+	List<PrimaryUnit> findByUnitOf(@Param("id") Long id);
 }
