@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.project.dto.PrimaryUnit;
 import com.ssafy.project.dto.PrimaryUnitList;
 import com.ssafy.project.dto.PrimaryUnitTitle;
 import com.ssafy.project.service.PrimaryUnitService;
@@ -24,6 +25,17 @@ public class PrimaryUnitController {
 	@Autowired
 	PrimaryUnitService service;
 
+	// 전체 테이블 조회
+	@GetMapping
+	public ResponseEntity<List<PrimaryUnit>> getPrimaryUnit() {
+		List<PrimaryUnit> list = service.findPrimaryUnit();
+		if (list == null) {
+			return new ResponseEntity<List<PrimaryUnit>>(new ArrayList<PrimaryUnit>(), HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<List<PrimaryUnit>>(list, HttpStatus.OK);
+		}
+	}
+	
 	// 해당 대단원의 중단원 목록
 	@GetMapping(value="/{mainId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<PrimaryUnitList>> getPrimaryUnitList(@PathVariable("mainId") Long mainId) {

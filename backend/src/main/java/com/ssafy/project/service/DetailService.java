@@ -19,6 +19,11 @@ public class DetailService {
 	@Autowired
 	DetailRepository repo;
 	
+	// 전체 테이블 조회
+	public List<Detail> findDetail(){		
+		return repo.findAll();
+	}
+	
 	// 소단원의 세부내용목록
 	public List<DetailList> findDetailList(Long unit){
 		List<Detail> detailList = repo.findByUnitOf(unit);

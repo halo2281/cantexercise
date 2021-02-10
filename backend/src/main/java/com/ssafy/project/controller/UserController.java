@@ -1,6 +1,7 @@
 package com.ssafy.project.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +45,16 @@ public class UserController {
 	@Autowired
 	private JwtService jwtService;
 
+	// 전체 테이블 조회
+	@GetMapping
+	public ResponseEntity<List<User>> userList() {
+		List<User> result = service.selectUserList();
+		if(result != null)
+			return new ResponseEntity<List<User>>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<List<User>>(result, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
 	// 로그인
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> login(@RequestBody LoginParam dto, HttpServletResponse response, HttpSession session){

@@ -18,6 +18,11 @@ public class PrimaryUnitService {
 	@Autowired
 	PrimaryUnitRepository repo;
 
+	// 전체 테이블 조회
+	public List<PrimaryUnit> findPrimaryUnit() {
+		return repo.findAll();
+	}
+	
 	// 해당 대단원의 중단원 목록
 	public List<PrimaryUnitList> findPrimaryUnitList(Long main) {
 		List<PrimaryUnit> units = repo.findByUnitOf(main);

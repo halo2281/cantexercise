@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.project.dto.Detail;
 import com.ssafy.project.dto.DetailList;
 import com.ssafy.project.dto.DetailResult;
 import com.ssafy.project.dto.DetailTitle;
@@ -25,6 +26,16 @@ public class DetailController {
 	@Autowired
 	DetailService service;
 
+	@GetMapping
+	public ResponseEntity<List<Detail>> getDetail() {
+		List<Detail> list = service.findDetail();
+		if (list == null) {
+			return new ResponseEntity<List<Detail>>(new ArrayList<Detail>(), HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<List<Detail>>(list, HttpStatus.OK);
+		}
+	}
+	
 	// 해당 소단원의 세부내용 목록
 	@GetMapping(value = "list/{subId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<DetailList>> getDetailList(@PathVariable("subId") Long id) {

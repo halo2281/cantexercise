@@ -13,7 +13,8 @@ public class WebConfig implements WebMvcConfigurer{
 	
 	private static final String[] EXCLUDE_PATHS = {
 			"/user/login",
-			"/user"
+			"/user",
+			"/swagger-ui.html"
 	};
 	
 	// CORS 세팅
@@ -30,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
-                        .addPathPatterns("/**")
+                        .addPathPatterns("/user/**", "/mainUnit/**", "/primaryUnit/**", "/subUnit/**")
                         .excludePathPatterns(EXCLUDE_PATHS);
     }
 }

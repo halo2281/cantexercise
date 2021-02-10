@@ -18,6 +18,11 @@ public class SubUnitService {
 	@Autowired
 	SubUnitRepository repo;
 	
+	// 전체 테이블 조회
+	public List<SubUnit> findSubUnit(){
+		return repo.findAll();
+	}
+	
 	public List<SubUnitList> findSubUnitList(Long primary){
 		List<SubUnit> unitList = repo.findByUnitOf(primary);
 		List<SubUnitList> result = new ArrayList<SubUnitList>();
