@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.project.dto.LoginParam;
 import com.ssafy.project.dto.User;
 import com.ssafy.project.dto.UserCheck;
 import com.ssafy.project.dto.UserSignIn;
@@ -16,6 +17,18 @@ public class UserService {
 
 	@Autowired
 	private UserRepository repo;
+	
+	// 로그인
+	public User login(LoginParam dto) {
+		
+		User user = repo.findByLogin(dto.getUserId());
+
+		if (user != null && user.getPassword().equals(dto.getPassword())) {
+			return user;
+		} else {
+			return null;
+		}
+	}
 	
 	// 회원 저장
 	public boolean insertUser(UserSignIn user) { 
