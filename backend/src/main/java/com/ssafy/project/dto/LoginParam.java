@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MainUnitList {
-	private Long mainId;
-	private String title;
-	private String image;
+public class LoginParam {
+
+	private String userId;
+	private String password;
+	
 }

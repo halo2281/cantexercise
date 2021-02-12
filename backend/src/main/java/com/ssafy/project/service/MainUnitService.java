@@ -25,6 +25,7 @@ public class MainUnitService {
 		
 		List<MainUnitList> result = new ArrayList<>();
 		units.forEach(unit -> result.add(new MainUnitList(
+				unit.getMainUnitId(),
 				unit.getTitle(),
 				unit.getImage()
 		)));

@@ -12,7 +12,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 war{
-	baseName = 'backend'
+	baseName = 'test'
 	version='0.0.1'
 }
 
@@ -38,6 +38,12 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+	
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+	compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.4.2'
+	
+	// https://mvnrepository.com/artifact/com.sun.xml.security/xml-security-impl
+	compile group: 'com.sun.xml.security', name: 'xml-security-impl', version: '1.0'
 	
 	
 	compileOnly 'org.projectlombok:lombok'

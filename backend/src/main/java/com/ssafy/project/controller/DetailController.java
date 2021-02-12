@@ -25,6 +25,16 @@ public class DetailController {
 	@Autowired
 	DetailService service;
 
+	@GetMapping
+	public ResponseEntity<List<DetailResult>> getDetail() {
+		List<DetailResult> list = service.findDetail();
+		if (list == null) {
+			return new ResponseEntity<List<DetailResult>>(new ArrayList<DetailResult>(), HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<List<DetailResult>>(list, HttpStatus.OK);
+		}
+	}
+	
 	// 해당 소단원의 세부내용 목록
 	@GetMapping(value = "list/{subId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<DetailList>> getDetailList(@PathVariable("subId") Long id) {
