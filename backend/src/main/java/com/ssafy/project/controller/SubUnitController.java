@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.project.dto.SubUnit;
 import com.ssafy.project.dto.SubUnitList;
+import com.ssafy.project.dto.SubUnitResult;
 import com.ssafy.project.dto.SubUnitTitle;
 import com.ssafy.project.service.SubUnitService;
 
@@ -27,12 +27,12 @@ public class SubUnitController {
 
 	// 전체 테이블 조회
 	@GetMapping
-	public ResponseEntity<List<SubUnit>> getSubUnit() {
-		List<SubUnit> list = service.findSubUnit();
+	public ResponseEntity<List<SubUnitResult>> getSubUnit() {
+		List<SubUnitResult> list = service.findSubUnit();
 		if (list == null) {
-			return new ResponseEntity<List<SubUnit>>(new ArrayList<SubUnit>(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<SubUnitResult>>(new ArrayList<SubUnitResult>(), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<List<SubUnit>>(list, HttpStatus.OK);
+			return new ResponseEntity<List<SubUnitResult>>(list, HttpStatus.OK);
 		}
 	}
 	

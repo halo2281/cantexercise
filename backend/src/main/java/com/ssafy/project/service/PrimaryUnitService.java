@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.project.dto.PrimaryUnit;
 import com.ssafy.project.dto.PrimaryUnitList;
+import com.ssafy.project.dto.PrimaryUnitResult;
 import com.ssafy.project.dto.PrimaryUnitTitle;
 import com.ssafy.project.repository.PrimaryUnitRepository;
 
@@ -19,8 +20,19 @@ public class PrimaryUnitService {
 	PrimaryUnitRepository repo;
 
 	// 전체 테이블 조회
-	public List<PrimaryUnit> findPrimaryUnit() {
-		return repo.findAll();
+	public List<PrimaryUnitResult> findPrimaryUnit() {
+		
+		List<PrimaryUnit> units = repo.findAll();
+		
+		List<PrimaryUnitResult> result = new ArrayList<>();
+		units.forEach(unit -> result.add(new PrimaryUnitResult(
+				unit.getPriUnitId(),
+				unit.getMain().getMainUnitId(),
+				unit.getTitle(),
+				unit.getImage()
+		)));
+		
+		return result;
 	}
 	
 	// 해당 대단원의 중단원 목록

@@ -20,8 +20,25 @@ public class DetailService {
 	DetailRepository repo;
 	
 	// 전체 테이블 조회
-	public List<Detail> findDetail(){		
-		return repo.findAll();
+	public List<DetailResult> findDetail(){		
+		List<Detail> detail = repo.findAll();
+		List<DetailResult> result = new ArrayList<>();
+		detail.forEach(e -> result.add(new DetailResult(
+					e.getDetailId(),
+					e.getUnit().getSubUnitId(),
+					e.getTitle(),
+					e.getPosture(),
+					e.getObjective(),
+					e.getTip(),
+					e.getGuideImage(),
+					e.getIotManual(),
+					e.getIotManualImage(),
+					e.getIotWearImage(),
+					e.getIotExerciseImage(),
+					e.getIotPracticeImage()
+				)));
+		
+		return result;
 	}
 	
 	// 소단원의 세부내용목록
