@@ -68,6 +68,14 @@ export default class Description extends Vue {
         const exerciseId = this.$route.params.exerciseId;
         this.prevUrl = `/`;
         this.nextUrl = `/sel/${exerciseId}`
+
+        // axios jwt header 붙여서 보내기
+        // const user = JSON.parse(localStorage.getItem('user'))
+        // console.log(user.accessToken)
+        // const header = {'accessToken' : user.accessToken};
+
+        // const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/mainUnit/${exerciseId}`, {headers: header});
+
         const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/mainUnit/${exerciseId}`);
 
         //console.log(mainUnit.data)

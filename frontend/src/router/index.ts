@@ -9,6 +9,7 @@ import Test from "../views/Test.vue";
 import Score from "../views/Score.vue";
 import NotFound from "../views/NotFound.vue";
 import Login from "../views/Login.vue"
+// import Image from "../views/image.vue"
 
 Vue.use(VueRouter);
 
@@ -63,6 +64,11 @@ const routes: Array<RouteConfig> = [
     name: "Score",
     component: Score
   },
+  // {
+  //   path: "/image",
+  //   name: "Image",
+  //   component: Image
+  // },
   {
     path: "/404",
     name: "NotFound",

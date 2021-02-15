@@ -88,7 +88,21 @@ export default class Login extends Vue {
     password = ""
 
     submit(){
-        alert(`id : ${this.id} / password : ${this.password}`)
+        //alert(`id : ${this.id} / password : ${this.password}`)
+        AxiosService.instance.post('/user/login', {
+          userId : this.id,
+          password : this.password
+        }).then(response => {
+          //console.log(response)
+          if (response.data.accessToken) {
+          console.log(response.data.accessToken)
+          localStorage.setItem('user', JSON.stringify(response.data));
+          // const user = JSON.parse(localStorage.getItem('user'))
+          // console.log(user.accessToken)
+          this.$router.push("/")
+        }
+        });
+
     }
   
 }
