@@ -55,6 +55,7 @@
 import {Component, Vue} from 'vue-property-decorator'
 import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
+import ContentService from '../axios/contentService'
 import { io } from "socket.io-client"
 
 @Component
@@ -73,12 +74,11 @@ export default class Test extends Vue {
 
 
   async created(){
-    // console.log(this.curUrlName);
     const exerciseId = this.$route.params.exerciseId;
     const contentId = this.$route.params.contentId;
-    // console.log(exerciseId);
-    // console.log(contentId);
-    const detail: AxiosResponse<[]> = await AxiosService.instance.get(`/detail/${contentId}`);
+ 
+    const detail: AxiosResponse<[]> = await ContentService.getDetail(contentId)
+
 
     if(this.curUrlName == "Connect") { 
       this.prevUrl = `/guide/${exerciseId}/${contentId}`;

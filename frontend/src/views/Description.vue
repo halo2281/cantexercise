@@ -50,8 +50,7 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
-import AxiosService from '../axios/index'
-import { AxiosResponse } from 'axios';
+import ContentService from '../axios/contentService'
 
 @Component
 export default class Description extends Vue {
@@ -69,16 +68,8 @@ export default class Description extends Vue {
         this.prevUrl = `/`;
         this.nextUrl = `/sel/${exerciseId}`
 
-        // axios jwt header 붙여서 보내기
-        // const user = JSON.parse(localStorage.getItem('user'))
-        // console.log(user.accessToken)
-        // const header = {'accessToken' : user.accessToken};
-
-        // const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/mainUnit/${exerciseId}`, {headers: header});
-
-        const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/mainUnit/${exerciseId}`);
-
-        //console.log(mainUnit.data)
+        const mainUnit: AxiosResponse<[]> = await ContentService.getMainUnit(exerciseId);
+   
         this.articles.push(["소개글", mainUnit.data.intro ]);
         this.articles.push(["향상 능력", mainUnit.data.improvement ]);
         this.image = require(`@/assets/images/mainUnit/${mainUnit.data.mainUnitId}.jpg`)
@@ -89,16 +80,13 @@ export default class Description extends Vue {
         this.prevUrl = `/sel/${exerciseId}`;
         this.nextUrl = `/connect/${exerciseId}/${contentId}`
 
-        const detail: AxiosResponse<[]> = await AxiosService.instance.get(`/detail/${contentId}`);
+        const detail: AxiosResponse<[]> = await ContentService.getDetail(contentId);
        
         this.articles.push(["목표", detail.data.objective]);
         this.articles.push(["자세", detail.data.posture ]);
         this.articles.push(["Tip", detail.data.tip ]);
         this.image = require(`@/assets/images/detail/${detail.data.detailId}.jpg`)
-      }
-
-      
-      // axios에서 대표 이미지와 설명글들 가져오는 부분 구현 필요   
+      }  
     }
 }
 </script>

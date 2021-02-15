@@ -10,59 +10,77 @@ import Score from "../views/Score.vue";
 import NotFound from "../views/NotFound.vue";
 import Login from "../views/Login.vue"
 // import Image from "../views/image.vue"
+import authToken from "../axios/auth"
 
 Vue.use(VueRouter);
+
+const requireAuth = () => (from, to , next) => {
+  if(authToken()) return next();
+  else {
+    alert("로그인이 필요한 서비스입니다. 로그인을 먼저 진행해주세요")
+    next('/');
+  }
+}
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Home",
-    component: Home
-  },
-  {
-    path: "/about",
-    name: "About",
-    component: About
-  },
-  {
-    path: "/login",
     name: "Login",
     component: Login
   },
   {
+    path: "/home",
+    name: "Home",
+    component: Home,
+    beforeEnter: requireAuth()
+  },
+  {
+    path: "/about",
+    name: "About",
+    component: About,
+    beforeEnter: requireAuth()
+  },
+  {
     path: "/main/:exerciseId",
     name: "ExerciseMain",
-    component: Description
+    component: Description,
+    beforeEnter: requireAuth()
   },
   {
     path: "/sel/:exerciseId",
     name: "ExerciseSel",
-    component: Selection
+    component: Selection,
+    beforeEnter: requireAuth()
   },
   {
     path: "/guide/:exerciseId/:contentId",
     name: "ContentMain",
-    component: Description
+    component: Description,
+    beforeEnter: requireAuth()
   },
   {
     path: "/connect/:exerciseId/:contentId",
     name: "Connect",
-    component: Test
+    component: Test,
+    beforeEnter: requireAuth()
   },
   {
     path: "/practice/:exerciseId/:contentId",
     name: "Practice",
-    component: Test
+    component: Test,
+    beforeEnter: requireAuth()
   },
   {
     path: "/test/:exerciseId/:contentId",
     name: "Test",
-    component: Test
+    component: Test,
+    beforeEnter: requireAuth()
   },
   {
     path: "/score/:exerciseId/:contentId",
     name: "Score",
-    component: Score
+    component: Score,
+    beforeEnter: requireAuth()
   },
   // {
   //   path: "/image",

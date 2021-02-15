@@ -15,7 +15,6 @@
 <script lang="ts">
 import {Component, Vue, Watch} from 'vue-property-decorator'
 import SliderList from '@/components/SliderList.vue'
-import AxiosService from '../axios/index'
 import { component } from 'vue/types/umd';
 
 @Component({

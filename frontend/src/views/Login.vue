@@ -8,7 +8,7 @@
         transition="scale-transition"
         width="150"
       />
-      <div class="text-h4 font-weight-bold">프로젝트 타이틀</div>
+      <div class="text-h4 font-weight-bold">운동 못하니?</div>
       <v-divider class="mt-5 mx-3"></v-divider>
       <ValidationObserver
         ref="observer"
@@ -72,8 +72,6 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
-import AxiosService from '../axios/index'
-import { AxiosResponse } from 'axios';
 import {required} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider} from 'vee-validate'
 
@@ -86,23 +84,23 @@ import {extend, ValidationObserver, ValidationProvider} from 'vee-validate'
 export default class Login extends Vue {
     id = ""
     password = ""
+    loading = false;
+    message = ""
 
     submit(){
-        //alert(`id : ${this.id} / password : ${this.password}`)
-        AxiosService.instance.post('/user/login', {
-          userId : this.id,
-          password : this.password
-        }).then(response => {
-          //console.log(response)
-          if (response.data.accessToken) {
-          console.log(response.data.accessToken)
-          localStorage.setItem('user', JSON.stringify(response.data));
-          // const user = JSON.parse(localStorage.getItem('user'))
-          // console.log(user.accessToken)
-          this.$router.push("/")
-        }
-        });
-
+      const user = { userId : `${this.id}`, password : `${this.password}`}
+        this.$store.dispatch('auth/login', user).then(
+            () => {
+              this.$router.push('/home');
+            },
+            error => {
+              this.loading = false;
+              this.message =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+        )
     }
   
 }

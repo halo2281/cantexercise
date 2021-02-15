@@ -64,6 +64,7 @@
 import {Component, Vue, Prop, Emit, Watch} from 'vue-property-decorator'
 import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
+import ContentService from '../axios/contentService'
 
 @Component
 export default class SliderList extends Vue {
@@ -75,14 +76,6 @@ export default class SliderList extends Vue {
   curUrl = `/guide/${this.$route.params.exerciseId}/`
 
   async mounted(){
-    //   props에서 받아온 아이디를 통해
-    //   console.log("id : "+this.id);
-    //   console.log("depth : "+this.depth);
-    //   console.log(this.isChange);
-    //   console.log(this.$route.params)
-      
-    //this.articles.push(["https://cdn.vuetifyjs.com/images/cards/cooking.png","제목"+this.index++])
-  
      this.getData();
   }
 
@@ -93,8 +86,8 @@ export default class SliderList extends Vue {
 
   async getData(){
       if(this.depth == 1){
-          const primaryUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/primaryUnit/${this.id}`);
-          const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/mainUnit/title/${this.id}`)
+          const primaryUnit: AxiosResponse<[]> = await ContentService.getPrimaryUnitList(this.id);
+          const mainUnit: AxiosResponse<[]> = await ContentService.getMainUnitTitle(this.id)
 
           this.title = mainUnit.data.title
 
@@ -103,17 +96,11 @@ export default class SliderList extends Vue {
                                 primaryUnit.data[i].title, 
                                 primaryUnit.data[i].primaryId]) 
           }
-
           // console.log(this.articles);
-          
-          // mainUnit(대단원) id를 사용하여 primaryUnit(중단원) 테이블의 아이디, 이미지와 제목을 가져옴
-          // mainUnit(대단원) id를 사용하여 mainUnit(대단원) 제목을 가져옴
+        
       } else if(this.depth == 2){
-          const primaryUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/primaryUnit/title/${this.id}`);
-          const subUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/subUnit/${this.id}`)
-
-          // console.log(primaryUnit.data);
-          // console.log(subUnit.data);
+          const primaryUnit: AxiosResponse<[]> = await ContentService.getPrimaryUnitTitle(this.id)
+          const subUnit: AxiosResponse<[]> = await ContentService.getSubUnitList(this.id)
 
           this.title = primaryUnit.data.title;
           
@@ -123,16 +110,12 @@ export default class SliderList extends Vue {
                                   subUnit.data[i].title, 
                                   subUnit.data[i].subId])
           }
-          // primaryUnit(중단원) id를 사용하여 subUnit(소단원) 테이블의 아이디, 이미지와 제목을 가져옴
-          // primaryUnit(중단원) id를 사용하여 primaryUnit(중단원) 제목을 가져옴
+         
       } else if(this.depth == 3){
-          const detail: AxiosResponse<[]> = await AxiosService.instance.get(`/detail/list/${this.id}`);
-          const subUnit: AxiosResponse<[]> = await AxiosService.instance.get(`/subUnit/title/${this.id}`)
+          const detail: AxiosResponse<[]> = await ContentService.getDetailList(this.id);
+          const subUnit: AxiosResponse<[]> = await ContentService.getSubUnitTitle(this.id);
           
           this.title = subUnit.data.title;
-          
-          // console.log(subUnit.data);
-          // console.log(detail.data);
           
           this.articles.length = 0;
           for(const i in detail.data){
@@ -140,15 +123,11 @@ export default class SliderList extends Vue {
                                   detail.data[i].title, 
                                   detail.data[i].detailId])
           }
-          // subUnit(소단원) id를 사용하여 detail(세부사항) 테이블의 아이디, 이미지와 제목을 가져옴
-          // subUnit(소단원) id를 사용하여 subUnit(소단원) 제목을 가져옴
       }
   }
 
   async sendSig(id){
-    //   console.log(this.depth);
-    //   console.log(event.path[1].innerText)
-      
+    //   console.log(this.depth); 
       if(this.depth == 3){
           // router를 이용하여 /guide/exerciseId/contetnId로 이동 
           const exerciseId = this.$route.params.exerciseId;

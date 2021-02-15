@@ -36,8 +36,7 @@
 
 <script lang="ts">
 import {Component, Vue, Watch} from 'vue-property-decorator'
-import AxiosService from '../axios/index'
-import { AxiosResponse } from 'axios';
+import ContentService from '../axios/contentService';
 
 @Component
 export default class Header extends Vue{
@@ -79,13 +78,13 @@ export default class Header extends Vue{
         else if(this.curUrlName == "Score") this.active = 6;
 
         if(this.active < 2){
-          const mainUnit: AxiosResponse<[]> = await AxiosService.instance
-          .get(`/mainUnit/${this.$route.params.exerciseId}`);
+          const mainUnit: AxiosResponse<[]> = await ContentService.
+          getMainUnitTitle(this.$route.params.exerciseId)
 
           this.title = mainUnit.data.title;
         } else {
-          const detail: AxiosResponse<[]> = await AxiosService.instance
-          .get(`/detail/${this.$route.params.contentId}`);
+          const detail: AxiosResponse<[]> = await ContentService.
+          getDetailTitle(this.$route.params.contentId)
           
           this.title = detail.data.title;
 
