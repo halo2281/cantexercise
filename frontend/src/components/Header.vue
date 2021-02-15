@@ -45,7 +45,7 @@ export default class Header extends Vue{
     curUrlName = this.$route.name;
     menus: string[] = ["소개", "선택", "가이드", "연결", "연습", "실습", "점수"];
     menuType = 0;
-    active = 0;
+    active = -1;
 
     @Watch('curUrlName')
     update(){
