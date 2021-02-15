@@ -41,7 +41,7 @@ import ContentService from '../axios/contentService';
 @Component
 export default class Header extends Vue{
     title = "";
-    curUrlName = this.$route.name;
+    curUrlName = ""
     menus: string[] = ["소개", "선택", "가이드", "연결", "연습", "실습", "점수"];
     menuType = 0;
     active = -1;
@@ -51,15 +51,16 @@ export default class Header extends Vue{
         this.setTypeAndActive()
     }
 
-    async mounted(){
-      console.log(this.curUrlName)
+    created(){
+      this.curUrlName = this.$route.name;
+      //console.log(this.curUrlName)
       this.setTypeAndActive()
-      console.log(this.active)
+      //console.log(this.active)
     }
 
     async setTypeAndActive(){
       if(this.curUrlName == "Home"){
-        this.title = "온라인 체육 학습 플랫폼"
+        this.title = "운동 못하니?"
       } else if(this.curUrlName == "About"){
         this.title = "도움말"
       } else if(this.curUrlName == "User"){

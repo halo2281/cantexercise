@@ -43,10 +43,10 @@ class ContentService {
         return AxiosService.instance.get(`/detail/title/${detailId}`, {headers: authToken()})
     }
 
-    postBookList(user){
+    getBook(user){
         return AxiosService.instance.post(`/book`, {
-           grade : user.grade,
-           school : user.school
+           grade : user.userGrade,
+           school : user.userSchool
         }, {headers: authToken()})
     }
 
