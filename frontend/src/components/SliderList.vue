@@ -40,7 +40,7 @@
             class="ml-5 mr-5 mt-5"
             height="250"
             width="300"
-            :href = curUrl+article[2]
+            :href = nextUrl+article[2]
           >
   
             <v-img
@@ -62,7 +62,6 @@
 
 <script lang="ts">
 import {Component, Vue, Prop, Emit, Watch} from 'vue-property-decorator'
-import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
 import ContentService from '../axios/contentService'
 
@@ -73,9 +72,9 @@ export default class SliderList extends Vue {
 
   title = "";
   articles:[string, string, number][] = [];
-  curUrl = `/guide/${this.$route.params.exerciseId}/`
+  nextUrl = `/guide/${this.$route.params.exerciseId}/`
 
-  async mounted(){
+  mounted(){
      this.getData();
   }
 
@@ -96,7 +95,7 @@ export default class SliderList extends Vue {
                                 primaryUnit.data[i].title, 
                                 primaryUnit.data[i].primaryId]) 
           }
-          // console.log(this.articles);
+          console.log(this.articles);
         
       } else if(this.depth == 2){
           const primaryUnit: AxiosResponse<[]> = await ContentService.getPrimaryUnitTitle(this.id)

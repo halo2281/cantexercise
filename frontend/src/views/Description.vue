@@ -50,6 +50,7 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
+import { AxiosResponse } from 'axios'
 import ContentService from '../axios/contentService'
 
 @Component

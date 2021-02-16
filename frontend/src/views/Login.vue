@@ -74,6 +74,7 @@
 import {Component, Vue} from 'vue-property-decorator'
 import {required} from 'vee-validate/dist/rules'
 import {extend, ValidationObserver, ValidationProvider} from 'vee-validate'
+// import authToken from '../axios/auth'
 
 @Component({
     components:{
@@ -87,11 +88,15 @@ export default class Login extends Vue {
     loading = false;
     message = ""
 
+    beforeCreate(){
+      // if(this.$store.state.auth.status.loggedIn) location.replace("/home");
+    }
+
     submit(){
       const user = { userId : `${this.id}`, password : `${this.password}`}
         this.$store.dispatch('auth/login', user).then(
             () => {
-              this.$router.push('/home');
+              location.href='/home';
             },
             error => {
               this.loading = false;

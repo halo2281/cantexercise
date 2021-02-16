@@ -17,16 +17,25 @@ Vue.use(VueRouter);
 const requireAuth = () => (from, to , next) => {
   if(authToken()) return next();
   else {
-    alert("로그인이 필요한 서비스입니다. 로그인을 먼저 진행해주세요")
+    alert("로그인이 필요한 서비스입니다.\n로그인을 먼저 해주세요.")
     next('/');
   }
+}
+
+const isAuth = () => (from, to, next) => {
+  if(authToken()) { 
+    alert("로그인 되어 있으면 접근할 수 없는 페이지 입니다.\n로그아웃을 먼저 해주세요.")
+    return next('/home');
+  }
+  else next();
 }
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Login",
-    component: Login
+    component: Login,
+    beforeEnter: isAuth()
   },
   {
     path: "/home",
