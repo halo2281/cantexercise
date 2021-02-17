@@ -1,5 +1,15 @@
 <template>
-  <v-app-bar app color="grey" dark>
+  <v-app-bar app color="grey lighten-1" dark
+    src="../assets/app_bar_background_grey.png"
+    contain
+  >
+    <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+          aspect-ratio="10"
+        ></v-img>
+    </template>
+
     <div class="d-flex align-center mr-5">
       <a href="/">
         <v-img
@@ -12,24 +22,24 @@
         />
       </a>
 
-    <v-toolbar-title class="font-weight-bold mr-5">{{ title }}</v-toolbar-title>
+    <v-toolbar-title class="font-weight-bold mr-5 black--text">{{ title }}</v-toolbar-title>
     </div>
 
-    <v-row v-if='this.menuType == 2' class="grey align-content-center">
+    <v-row v-if='this.menuType == 2' class="align-content-center">
       <v-flex class="text-center" v-for="(menu, idx) in menus" :key="idx" >
-        <div v-if="active == idx" class="black--text font-weight-bold">{{menu}}</div>
-        <div v-else class="white--text font-weight-bold">{{menu}}</div>
+        <div v-if="active == idx" class= "blue--text font-weight-bold">{{menu}}</div>
+        <div v-else class="black--text font-weight-bold">{{menu}}</div>
       </v-flex>
     </v-row>
 
     <v-spacer></v-spacer>
 
     <v-btn href="/my" text>
-      <v-icon>mdi-account</v-icon>
+      <v-icon color="grey">mdi-account</v-icon>
     </v-btn>
 
     <v-btn href="/about" text>
-      <v-icon>mdi-help</v-icon>
+      <v-icon color="grey">mdi-help</v-icon>
     </v-btn>
   </v-app-bar>
 </template>

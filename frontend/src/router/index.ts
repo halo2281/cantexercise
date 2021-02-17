@@ -5,6 +5,8 @@ import Home from "../views/Home.vue";
 import About from "../views/About.vue";
 import Selection from "../views/Selection.vue";
 import Description from "../views/Description.vue";
+import Connect from "../views/Connect.vue"
+import Practice from "../views/Practice.vue"
 import Test from "../views/Test.vue";
 import Score from "../views/Score.vue";
 import NotFound from "../views/NotFound.vue";
@@ -70,13 +72,13 @@ const routes: Array<RouteConfig> = [
   {
     path: "/connect/:exerciseId/:contentId",
     name: "Connect",
-    component: Test,
+    component: Connect,
     beforeEnter: requireAuth()
   },
   {
     path: "/practice/:exerciseId/:contentId",
     name: "Practice",
-    component: Test,
+    component: Practice,
     beforeEnter: requireAuth()
   },
   {

@@ -4,40 +4,23 @@
   <v-container>
     <v-row no-gutters
     class="ml-auto mr-auto mt-10"
-    align="center"
-    justify="center"
     >
       <v-col cols = "5">
-        <v-carousel
-          cycle
-          hide-delimiter-background
-          interval="2000"
-          :show-arrows = "false"
+        <v-img
+        class="ml-auto mr-auto"   
+        min-height="400"
+        max-height="400"
+        :src="contents[curActionNum-1].image" 
+        contain
         >
-          <v-carousel-item
-            v-for="(content, i) in contents"
-            :key="i"
-          >
-            <v-img
-              class="ml-auto mr-auto"   
-              min-height="400"
-              max-height="400"
-              :src="content.image" 
-              contain
-            >
-            </v-img>
-            <div class="text-center mt-5">
-              <span>{{i+1}} / {{totActionNum}} </span>
-            </div>
-          </v-carousel-item>
-        </v-carousel>
+        </v-img>
       </v-col>
 
       <v-spacer></v-spacer>
 
       <v-col>
         <v-btn
-        class = "white--text"
+        class = "ml-11 white--text"
         :class="stateColor[connectState]"
         @click="IoTConnect"
         >
@@ -58,13 +41,13 @@
     <v-row
     class = "mt-10"
     align="center"
-    justify="center">
-      <v-btn 
+    justify="space-around">
+      <v-btn v-for="(content, idx) in contents" :key="idx"
       class="white--text"
-      :class="stateColor[testState]"
-      @click="startTest()"
+      :class="stateColor[content.state]"
+      @click="startPractice(idx)"
       >
-        실습 시작
+        연습 동작 {{idx+1}}번
       </v-btn>
     </v-row>
     
@@ -127,10 +110,8 @@ export default class Test extends Vue {
     "content" : ""
   };
   connectState = 0;
-  testState = 0;
   totActionNum = 0;
-  curActionNum = 0;
-  practiceStates = [];
+  curActionNum = 1;
   stateColor:string [] = ["grey lighten-1", "success", "error", "primary"]
   connectStateMsg:string [] = ["연결 하기", "연결 중...", "연결 실패", "연결 성공"]
   curUrlName = this.$route.name;
@@ -144,28 +125,25 @@ export default class Test extends Vue {
  
     const detail: AxiosResponse<[]> = await ContentService.getDetail(contentId)
     //console.log(detail.data)
-
-    this.curActionNum = 1;
     this.totActionNum = detail.data.actionNum;
+    this.prevUrl = `/connect/${exerciseId}/${contentId}`;
+    this.nextUrl = `/test/${exerciseId}/${contentId}`;
 
-    this.prevUrl = `/practice/${exerciseId}/${contentId}`;
-    this.nextUrl = `/score/${exerciseId}/${contentId}`
-
+    //this.images.push(require(`@/assets/images/detail/${detail.data.detailId}.jpg`))
     for(let i = 0; i < this.totActionNum ; i++) {
       const tmp = {
+          "state" : 0,
           "image" : require(`@/assets/images/practice/${detail.data.detailId}_${i+1}.jpg`),
       }
       this.contents.push(tmp);
     } 
 
-    //console.log(this.contents)
-      
-    //this.images.push(require(`@/assets/images/detail/${detail.data.detailId}.jpg`))
+    console.log(this.contents)
+    //this.image = require(`@/assets/images/detail/${detail.data.detailId}.jpg`);
     //this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
-    this.help.title = "도움말"
-    this.help.content = "위의 실습 시작 버튼을 클릭하면 실습이 시작됩니다."
-    
-    }
+    this.help.title = "도움말" 
+    this.help.content = "위의 연습 동작 버튼을 클릭하면 연습이 시작됩니다."
+  }
 
     mounted(){
       //const socket = io('http://52.79.57.59:8083')
@@ -203,14 +181,15 @@ export default class Test extends Vue {
       })
     }
 
-    startTest(){
+    startPractice(idx){
       const contentId = this.$route.params.contentId;
-      console.log("실습 시작");
-      this.testState = 1;
-      //console.log(this.testState)
+      console.log(`연습 동작 ${idx+1}`);
+      this.contents[idx].state = 1;
+      this.curActionNum = idx+1;
+      this.help.content = `연습 동작 ${idx+1}번 시작`;
 
       const sensorSocket = io('http://52.79.57.59:8083')
-      sensorSocket.emit("sensorFTS", `${contentId}_0` )
+      sensorSocket.emit("sensorFTS", `${contentId}_${idx+1}` )
 
       sensorSocket.on('sensorSTF', (data) =>{
         console.log(data)

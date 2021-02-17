@@ -4,40 +4,23 @@
   <v-container>
     <v-row no-gutters
     class="ml-auto mr-auto mt-10"
-    align="center"
-    justify="center"
     >
       <v-col cols = "5">
-        <v-carousel
-          cycle
-          hide-delimiter-background
-          interval="2000"
-          :show-arrows = "false"
+        <v-img
+        class="ml-auto mr-auto"   
+        min-height="400"
+        max-height="400"
+        :src="image" 
+        contain
         >
-          <v-carousel-item
-            v-for="(content, i) in contents"
-            :key="i"
-          >
-            <v-img
-              class="ml-auto mr-auto"   
-              min-height="400"
-              max-height="400"
-              :src="content.image" 
-              contain
-            >
-            </v-img>
-            <div class="text-center mt-5">
-              <span>{{i+1}} / {{totActionNum}} </span>
-            </div>
-          </v-carousel-item>
-        </v-carousel>
+        </v-img>
       </v-col>
 
       <v-spacer></v-spacer>
 
       <v-col>
         <v-btn
-        class = "white--text"
+        class = "ml-11 white--text"
         :class="stateColor[connectState]"
         @click="IoTConnect"
         >
@@ -54,19 +37,6 @@
         />
       </v-col>
     </v-row>
-
-    <v-row
-    class = "mt-10"
-    align="center"
-    justify="center">
-      <v-btn 
-      class="white--text"
-      :class="stateColor[testState]"
-      @click="startTest()"
-      >
-        실습 시작
-      </v-btn>
-    </v-row>
     
     <v-alert
       class="mt-10 mr-auto ml-auto"
@@ -75,12 +45,13 @@
       color="deep-purple accent-4"
       elevation="2"
       max-width="1000"
+      v-for="(article, idx) in articles" :key="idx"
     >
       <div class="title">
-        {{help.title}}
+        {{article[0]}}
       </div>
       <v-divider></v-divider>
-      <div class="mt-5">{{help.content}}</div>
+      <div class="mt-5">{{article[1]}}</div>
     </v-alert>
 
     <v-row
@@ -121,16 +92,10 @@ export default class Test extends Vue {
   // 촬영되야 되는 이미지가 필요한 경우 컴포넌트를 하나 추가적으로 생성
   // 자세 비교 시 진행에 맞춰 피드백도 가져와야 됨 -> 미정
 
-  contents = [];
-  help = {
-    "title" : "",
-    "content" : ""
-  };
+  image = "";
+  articles: [string, string][] = [];
+  feedback: [string, string][] = [];
   connectState = 0;
-  testState = 0;
-  totActionNum = 0;
-  curActionNum = 0;
-  practiceStates = [];
   stateColor:string [] = ["grey lighten-1", "success", "error", "primary"]
   connectStateMsg:string [] = ["연결 하기", "연결 중...", "연결 실패", "연결 성공"]
   curUrlName = this.$route.name;
@@ -143,28 +108,14 @@ export default class Test extends Vue {
     const contentId = this.$route.params.contentId;
  
     const detail: AxiosResponse<[]> = await ContentService.getDetail(contentId)
-    //console.log(detail.data)
-
-    this.curActionNum = 1;
-    this.totActionNum = detail.data.actionNum;
-
-    this.prevUrl = `/practice/${exerciseId}/${contentId}`;
-    this.nextUrl = `/score/${exerciseId}/${contentId}`
-
-    for(let i = 0; i < this.totActionNum ; i++) {
-      const tmp = {
-          "image" : require(`@/assets/images/practice/${detail.data.detailId}_${i+1}.jpg`),
-      }
-      this.contents.push(tmp);
-    } 
-
-    //console.log(this.contents)
-      
-    //this.images.push(require(`@/assets/images/detail/${detail.data.detailId}.jpg`))
-    //this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
-    this.help.title = "도움말"
-    this.help.content = "위의 실습 시작 버튼을 클릭하면 실습이 시작됩니다."
+    console.log(detail.data)
     
+    this.prevUrl = `/guide/${exerciseId}/${contentId}`;
+    this.nextUrl = `/practice/${exerciseId}/${contentId}`;
+      
+    this.articles.push(["장비 착용 방법", detail.data.iotManual]);
+    this.image = require(`@/assets/images/connect/${detail.data.detailId}.jpg`)
+ 
     }
 
     mounted(){
@@ -189,28 +140,6 @@ export default class Test extends Vue {
 
       const sensorSocket = io('http://52.79.57.59:8083')
       sensorSocket.emit("sensorFTS", "connect" )
-
-      sensorSocket.on('sensorSTF', (data) =>{
-        console.log(data)
-
-        // if(){
-        //   // 연결 성공하면 
-        //   this.connectState = 3;
-        // } else {
-        //   // 연결 성공하면
-        //   this.connectState = 2;
-        // }
-      })
-    }
-
-    startTest(){
-      const contentId = this.$route.params.contentId;
-      console.log("실습 시작");
-      this.testState = 1;
-      //console.log(this.testState)
-
-      const sensorSocket = io('http://52.79.57.59:8083')
-      sensorSocket.emit("sensorFTS", `${contentId}_0` )
 
       sensorSocket.on('sensorSTF', (data) =>{
         console.log(data)
