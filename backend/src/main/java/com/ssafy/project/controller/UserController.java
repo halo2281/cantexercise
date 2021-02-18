@@ -69,7 +69,9 @@ public class UserController {
 				
 //				토큰 정보는 response의 헤더로 보내고 나머지는 Map에 담는다.
 				resultMap.put("accessToken", token);
-				resultMap.put("userId", user.getLoginId());
+				resultMap.put("userId", user.getId());
+				resultMap.put("userSchool", user.getSchool());
+				resultMap.put("userGrade", user.getGrade());
 				status = HttpStatus.OK;
 			} else {
 				resultMap.put("message", "로그인 실패");
