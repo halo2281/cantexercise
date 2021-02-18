@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.project.dto.MainUnit;
-import com.ssafy.project.dto.MainUnitList;
 import com.ssafy.project.dto.MainUnitResult;
 import com.ssafy.project.dto.MainUnitTitle;
 import com.ssafy.project.repository.MainUnitRepository;
@@ -20,19 +19,39 @@ public class MainUnitService {
 	MainUnitRepository repo;
 
 	// 전체 대단원 목록 조회
-	public List<MainUnitList> findMainUnitList() {
+	public List<MainUnitResult> findMainUnitList() {
 		List<MainUnit> units = repo.findAll();
 		
-		List<MainUnitList> result = new ArrayList<>();
-		units.forEach(unit -> result.add(new MainUnitList(
+		List<MainUnitResult> result = new ArrayList<>();
+		units.forEach(unit -> result.add(new MainUnitResult(
 				unit.getMainUnitId(),
+				unit.getSb().getBookId(),
 				unit.getTitle(),
+				unit.getIntro(),
+				unit.getImprovement(),
 				unit.getImage()
 		)));
 		
 		return result;
 	}
 
+	// 해당 교과서(id)의 대단원 목록
+	public List<MainUnitResult> findListOfBook(Long id){
+		List<MainUnit> units = repo.findBySB(id);
+		
+		List<MainUnitResult> result = new ArrayList<>();
+		units.forEach(unit -> result.add(new MainUnitResult(
+				unit.getMainUnitId(),
+				unit.getSb().getBookId(),
+				unit.getTitle(),
+				unit.getIntro(),
+				unit.getImprovement(),
+				unit.getImage()
+		)));
+		
+		return result;
+	}
+	
 	// 해당 대단원의 제목
 	public Optional<MainUnitTitle> findMainUnitTitle(Long id) {
 		Optional<MainUnit> unit = repo.findById(id);

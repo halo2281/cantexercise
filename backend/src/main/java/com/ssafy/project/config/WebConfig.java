@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
-                        .addPathPatterns("/user/**", "/mainUnit/**", "/primaryUnit/**", "/subUnit/**")
+                        .addPathPatterns("/user/**", "/mainUnit/**", "/primaryUnit/**", "/subUnit/**", "/detail/**")
                         .excludePathPatterns(EXCLUDE_PATHS);
     }
 }

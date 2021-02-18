@@ -55,7 +55,7 @@ public class DetailController {
 
 	// 해당 세부내용의 제목
 	@GetMapping(value = "/title/{detailId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<DetailTitle> getDetailTitle(@PathVariable("primaryId") Long id) {
+	public ResponseEntity<DetailTitle> getDetailTitle(@PathVariable("detailId") Long id) {
 		Optional<DetailTitle> unit = service.findDetailTitle(id);
 		return new ResponseEntity<DetailTitle>(unit.get(), HttpStatus.OK);
 	}
