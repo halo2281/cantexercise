@@ -2,8 +2,8 @@
   <!-- 소개, 가이드 페이지로 사용 -->
   <!-- 장비 연결, 자세 연습, 실습 페이지로 사용 -->
   <v-container>
-    <v-row no-gutters
-    class="ml-auto mr-auto mt-10"
+    <div 
+    class="ml-auto mr-auto mt-10 d-flex justify-space-around align-center"
     align="center"
     justify="center"
     >
@@ -11,8 +11,10 @@
         <v-carousel
           cycle
           hide-delimiter-background
+          hide-delimiters
           interval="2000"
           :show-arrows = "false"
+          style="height: 450px;"
         >
           <v-carousel-item
             v-for="(content, i) in contents"
@@ -53,10 +55,9 @@
          min-height="400"
         />
       </v-col>
-    </v-row>
+    </div>
 
     <v-row
-    class = "mt-10"
     align="center"
     justify="center">
       <v-btn 
@@ -64,7 +65,19 @@
       :class="stateColor[testState]"
       @click="startTest()"
       >
-        실습 시작
+        {{testBtnMsg}}
+      </v-btn>
+    </v-row>
+
+    <v-row
+    class = "mt-10"
+    align="center"
+    justify="space-around">
+      <v-btn v-for="(content, idx) in contents" :key="idx"
+      class="white--text"
+      :class="stateColor[content.state]"
+      >
+        동작 {{idx+1}}번
       </v-btn>
     </v-row>
     
@@ -128,8 +141,10 @@ export default class Test extends Vue {
   };
   connectState = 0;
   testState = 0;
+  testBtnMsg = ""
   totActionNum = 0;
   curActionNum = 0;
+  iotNum = 0;
   practiceStates = [];
   stateColor:string [] = ["grey lighten-1", "success", "error", "primary"]
   connectStateMsg:string [] = ["연결 하기", "연결 중...", "연결 실패", "연결 성공"]
@@ -137,6 +152,7 @@ export default class Test extends Vue {
   prevUrl = "";
   nextUrl = "";
   camera = "";
+  socket = io('http://52.79.57.59:8083')
 
   async created(){
     const exerciseId = this.$route.params.exerciseId;
@@ -147,6 +163,7 @@ export default class Test extends Vue {
 
     this.curActionNum = 1;
     this.totActionNum = detail.data.actionNum;
+    this.iotNum = detail.data.iotNum;
 
     this.prevUrl = `/practice/${exerciseId}/${contentId}`;
     this.nextUrl = `/score/${exerciseId}/${contentId}`
@@ -154,6 +171,7 @@ export default class Test extends Vue {
     for(let i = 0; i < this.totActionNum ; i++) {
       const tmp = {
           "image" : require(`@/assets/images/practice/${detail.data.detailId}_${i+1}.jpg`),
+          "state" : 0,
       }
       this.contents.push(tmp);
     } 
@@ -164,90 +182,69 @@ export default class Test extends Vue {
     //this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
     this.help.title = "도움말"
     this.help.content = "위의 실습 시작 버튼을 클릭하면 실습이 시작됩니다."
-    
+
+    this.testBtnMsg = "실습 시작" 
     }
 
     mounted(){
-      //const socket = io('http://52.79.57.59:8083')
-      //this.sensorSocket(socket)
-      const imageSocket = io('http://52.79.57.59:8083')
-      imageSocket.emit("imageFTS", "start" )
 
-      imageSocket.on('imageSTF', (data) =>{
-        console.log(data)
+      this.socket.emit("imageFTS", "start" )
+
+      this.socket.on('imageSTF', (data) =>{
+        //console.log(data)
         this.camera = new TextDecoder("utf-8").decode(data);
       })
-    }
 
-    destroyed(){
-      const imageSocket = io('http://52.79.57.59:8083')
-      imageSocket.emit("imageFTS", "stop" )
+      this.socket.on('sensorSTF', (data) =>{
+        const ret = JSON.parse(data);
+        console.log(ret);
+
+        if(ret.success){
+          if(ret.success == 1) this.connectState = 3;
+          else if(ret.success == 0) this.connectState = 2;
+        }
+
+        if(ret.actnum){
+          if(ret.ispass == 0){
+            this.contents[ret.actnum].state = 2;
+            console.log("실패")
+          } else if(ret.ispass == 1){
+            this.contents[ret.actnum].state = 3;
+            console.log("성공")
+          }
+
+          if(ret.actnum == this.totActionNum-1 && ret.ispass == 1) {
+            this.testState = 3;
+            this.testBtnMsg = "실습 완료"
+
+            const exerciseId = this.$route.params.exerciseId;
+            const contentId = this.$route.params.contentId;
+            location.href=`/score/${exerciseId}/${contentId}?score=90`
+          }
+        }
+        
+      })
     }
 
     IoTConnect(){
       this.connectState = 1;
+      const contentId = this.$route.params.contentId;
 
-      const sensorSocket = io('http://52.79.57.59:8083')
-      sensorSocket.emit("sensorFTS", "connect" )
-
-      sensorSocket.on('sensorSTF', (data) =>{
-        console.log(data)
-
-        // if(){
-        //   // 연결 성공하면 
-        //   this.connectState = 3;
-        // } else {
-        //   // 연결 성공하면
-        //   this.connectState = 2;
-        // }
-      })
+      for(let i = 0; i < this.iotNum ; i++) {
+        this.socket.emit("sensorFTS", `${contentId}_0${i+1}` )
+      }
     }
 
     startTest(){
       const contentId = this.$route.params.contentId;
       console.log("실습 시작");
       this.testState = 1;
+      this.testBtnMsg = "실습 중..."
       //console.log(this.testState)
 
-      const sensorSocket = io('http://52.79.57.59:8083')
-      sensorSocket.emit("sensorFTS", `${contentId}_0` )
-
-      sensorSocket.on('sensorSTF', (data) =>{
-        console.log(data)
-
-        // if(){
-        //   // 연결 성공하면 
-        //   this.connectState = 3;
-        // } else {
-        //   // 연결 성공하면
-        //   this.connectState = 2;
-        // }
-      })
+      this.socket.emit("sensorFTS", `${contentId}_20` )
     }
 
-    sensorSocket(socket){
-      const ret = null;
-  
-        // socket.on('serverToFront', (data)=>{
-        //   console.log(data)
-        //   console.log("actnum : " + data.actnum)
-        //   console.log("ispass : " + data.ispass)
-
-        //   const actNum = parseInt(data.actnum, 10) + 1;
-
-        //   let feedMsg = "";
-
-        //   if(data.ispass == "1") {
-        //     feedMsg += "성공하셨습니다. 다음 동작을 시작해주세요!"
-        //   } else {
-        //     feedMsg += `구분 동작 ${actNum}번 실패했습니다. 동작을 다시 해주세요.`
-        //   }
-
-        //   this.articles.pop()
-        //   this.articles.push(["피드백", feedMsg])
-        // })
-    }
-
-    
 }
+
 </script>

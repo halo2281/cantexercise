@@ -3,9 +3,10 @@
   <v-container>
     <v-img 
       class="ml-auto mr-auto mt-10"
-      height="400"
+      height="300"
       width="400"
       :src='image'
+      contain
     >
     </v-img>
 

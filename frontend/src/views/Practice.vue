@@ -2,8 +2,10 @@
   <!-- 소개, 가이드 페이지로 사용 -->
   <!-- 장비 연결, 자세 연습, 실습 페이지로 사용 -->
   <v-container>
-    <v-row no-gutters
-    class="ml-auto mr-auto mt-10"
+    <div 
+    class="ml-auto mr-auto mt-10 d-flex justify-space-around align-center"
+    align="center"
+    justify="center"
     >
       <v-col cols = "5">
         <v-img
@@ -16,19 +18,19 @@
         </v-img>
       </v-col>
 
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
-      <v-col>
-        <v-btn
-        class = "ml-11 white--text"
+    <v-col>
+      <v-btn
+        class = "white--text"
         :class="stateColor[connectState]"
         @click="IoTConnect"
         >
           {{connectStateMsg[connectState]}}
-        </v-btn>
-      </v-col>
+      </v-btn>
+    </v-col>
 
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
       <v-col cols = "5">
         <img 
@@ -36,7 +38,7 @@
          min-height="400"
         />
       </v-col>
-    </v-row>
+    </div>
 
     <v-row
     class = "mt-10"
@@ -112,12 +114,14 @@ export default class Test extends Vue {
   connectState = 0;
   totActionNum = 0;
   curActionNum = 1;
+  iotNum = 0;
   stateColor:string [] = ["grey lighten-1", "success", "error", "primary"]
   connectStateMsg:string [] = ["연결 하기", "연결 중...", "연결 실패", "연결 성공"]
   curUrlName = this.$route.name;
   prevUrl = "";
   nextUrl = "";
   camera = "";
+  socket = io('http://52.79.57.59:8083')
 
   async created(){
     const exerciseId = this.$route.params.exerciseId;
@@ -126,6 +130,8 @@ export default class Test extends Vue {
     const detail: AxiosResponse<[]> = await ContentService.getDetail(contentId)
     //console.log(detail.data)
     this.totActionNum = detail.data.actionNum;
+    this.iotNum = detail.data.iotNum;
+
     this.prevUrl = `/connect/${exerciseId}/${contentId}`;
     this.nextUrl = `/test/${exerciseId}/${contentId}`;
 
@@ -138,95 +144,75 @@ export default class Test extends Vue {
       this.contents.push(tmp);
     } 
 
-    console.log(this.contents)
+    //console.log(this.contents)
     //this.image = require(`@/assets/images/detail/${detail.data.detailId}.jpg`);
     //this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
     this.help.title = "도움말" 
     this.help.content = "위의 연습 동작 버튼을 클릭하면 연습이 시작됩니다."
+
   }
 
     mounted(){
-      //const socket = io('http://52.79.57.59:8083')
-      //this.sensorSocket(socket)
-      const imageSocket = io('http://52.79.57.59:8083')
-      imageSocket.emit("imageFTS", "start" )
 
-      imageSocket.on('imageSTF', (data) =>{
-        console.log(data)
+      this.socket.emit("imageFTS", "start" )
+
+      this.socket.on('imageSTF', (data) =>{
+        //console.log(data)
         this.camera = new TextDecoder("utf-8").decode(data);
+      })
+
+      this.socket.on('sensorSTF', (data) =>{
+        const ret = JSON.parse(data);
+        console.log(ret);
+
+        if(ret.success){
+          if(ret.success == 1) this.connectState = 3;
+          else if(ret.success == 0) this.connectState = 2;
+        }
+
+        if(ret.actnum){
+          if(ret.ispass == 0){
+            this.contents[ret.actnum].state = 2;
+            console.log("실패")
+          } else if(ret.ispass == 1){
+            this.contents[ret.actnum].state = 3;
+            console.log("성공")
+          }
+        }        
       })
     }
 
     destroyed(){
-      const imageSocket = io('http://52.79.57.59:8083')
-      imageSocket.emit("imageFTS", "stop" )
+      this.socket.emit("imageFTS", "stop" )
     }
 
     IoTConnect(){
       this.connectState = 1;
+      const contentId = this.$route.params.contentId;
 
-      const sensorSocket = io('http://52.79.57.59:8083')
-      sensorSocket.emit("sensorFTS", "connect" )
-
-      sensorSocket.on('sensorSTF', (data) =>{
-        console.log(data)
-
-        // if(){
-        //   // 연결 성공하면 
-        //   this.connectState = 3;
-        // } else {
-        //   // 연결 성공하면
-        //   this.connectState = 2;
-        // }
-      })
+      for(let i = 0; i < this.iotNum ; i++) {
+        this.socket.emit("sensorFTS", `${contentId}_0${i+1}` )
+      }       
     }
 
     startPractice(idx){
       const contentId = this.$route.params.contentId;
       console.log(`연습 동작 ${idx+1}`);
       this.contents[idx].state = 1;
+      
+      // for(let i = 0; i < this.totActionNum ; i++) {
+      //   if(this.contents[i].state == 2) 
+      // }
+
+      if(this.contents[this.curActionNum-1].state == 2) this.socket.emit("sensorFTS", "stop" ) 
+
       this.curActionNum = idx+1;
       this.help.content = `연습 동작 ${idx+1}번 시작`;
 
-      const sensorSocket = io('http://52.79.57.59:8083')
-      sensorSocket.emit("sensorFTS", `${contentId}_${idx+1}` )
 
-      sensorSocket.on('sensorSTF', (data) =>{
-        console.log(data)
-
-        // if(){
-        //   // 연결 성공하면 
-        //   this.connectState = 3;
-        // } else {
-        //   // 연결 성공하면
-        //   this.connectState = 2;
-        // }
-      })
+      this.socket.emit("sensorFTS", `${contentId}_1${idx+1}` )      
     }
 
-    sensorSocket(socket){
-      const ret = null;
-  
-        // socket.on('serverToFront', (data)=>{
-        //   console.log(data)
-        //   console.log("actnum : " + data.actnum)
-        //   console.log("ispass : " + data.ispass)
-
-        //   const actNum = parseInt(data.actnum, 10) + 1;
-
-        //   let feedMsg = "";
-
-        //   if(data.ispass == "1") {
-        //     feedMsg += "성공하셨습니다. 다음 동작을 시작해주세요!"
-        //   } else {
-        //     feedMsg += `구분 동작 ${actNum}번 실패했습니다. 동작을 다시 해주세요.`
-        //   }
-
-        //   this.articles.pop()
-        //   this.articles.push(["피드백", feedMsg])
-        // })
-    }
-
-    
 }
+
 </script>

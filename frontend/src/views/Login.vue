@@ -96,7 +96,7 @@ export default class Login extends Vue {
       const user = { userId : `${this.id}`, password : `${this.password}`}
         this.$store.dispatch('auth/login', user).then(
             () => {
-              // location.href='/home';
+              location.href='/home';
             },
             error => {
               this.loading = false;

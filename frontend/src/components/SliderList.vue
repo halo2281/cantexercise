@@ -11,47 +11,45 @@
       <v-slide-item
         v-for="(article, idx) in articles"
         :key="idx"
-        v-slot="{ active }"
+
       >
         <div v-if= "depth < 3">
           <v-card 
-            :color="active ? undefined : 'grey'"
             class="ml-5 mr-5 mt-5"
-            height="250"
+            height="350"
             width="300"
+            style="background-color: rgb(201,167,139);"
             @click="sendSig(article[2])"
           >
-
-            <v-img
-             height="270"
-             :src='article[0]'
-             alt = "../assets/images/mainUnit/3.PNG"
-             class="balck--text align-end"
-            >
-              <v-card-title
-              >{{article[1]}}</v-card-title>
-            </v-img>
+            <v-row justify="center">
+              <img
+              class="mt-5"
+              height="270"
+              :src='article[0]'
+              contain
+              />
+            </v-row>
+            <v-card-subtitle class="white--text mt-3">{{article[1]}}</v-card-subtitle>
           </v-card>
         </div>
 
         <div v-else>
           <v-card 
-            :color="active ? undefined : 'grey'"
             class="ml-5 mr-5 mt-5"
-            height="250"
+            height="350"
             width="300"
+            style="background-color: rgb(201,167,139);"
             :href = nextUrl+article[2]
           >
-  
-            <v-img
-             height="270"
-             :src='article[0]'
-             alt = "../assets/images/mainUnit/3.PNG"
-             class="balck--text align-end"
-            >
-              <v-card-title
-              >{{article[1]}}</v-card-title>
-            </v-img>
+          <v-row justify="center">
+              <img
+              class="mt-5"
+              height="270"
+              :src='article[0]'
+              contain
+              />
+            </v-row>
+          <v-card-subtitle class="white--text mt-3">{{article[1]}}</v-card-subtitle>
           </v-card>
         </div>
 

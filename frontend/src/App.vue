@@ -3,7 +3,7 @@
     <div v-if = 'loggedIn'>
     <Header></Header>
     </div>
-    <v-main style="background-color: rgb(201,167,139);">
+    <v-main style="background-color: rgba(201,167,139,0.7);">
       <router-view></router-view>
     </v-main>
   </v-app>
