@@ -11,7 +11,7 @@
     </template>
 
     <div class="d-flex align-center mr-5">
-      <a href="/">
+      <a href="/home">
         <v-img
           alt="Vuetify Logo"
           class="shrink mr-2"
@@ -34,9 +34,37 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn href="/my" text>
-      <v-icon color="grey">mdi-account</v-icon>
-    </v-btn>
+    <v-menu
+      bottom
+      left
+      offset-y
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          dark
+          icon
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon color="grey">mdi-account</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item>
+          <v-btn href="/my" text>
+            마이 페이지
+          </v-btn>
+        </v-list-item>
+        <v-list-item>
+          <v-btn text
+          @click="logout()"
+          >
+            로그 아웃
+          </v-btn>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <v-btn href="/about" text>
       <v-icon color="grey">mdi-help</v-icon>
@@ -98,12 +126,14 @@ export default class Header extends Vue{
           getDetailTitle(this.$route.params.contentId)
           
           this.title = detail.data.title;
-
         }
       }
     }
 
-    
+    logout(){
+      this.$store.dispatch('auth/logout');
+      location.href='/';
+    }
     
 }
 </script>

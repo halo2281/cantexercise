@@ -18,6 +18,9 @@ class UserService{
         )
     }
 
+    logout() {
+        localStorage.removeItem('user');
+    }
 
 }
 

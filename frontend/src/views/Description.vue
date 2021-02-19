@@ -14,15 +14,17 @@
       class="mt-5 mr-auto ml-auto"
       border="left"
       colored-border
-      color="deep-purple accent-4"
+      color="rgb(102,51,0)"
       elevation="2"
-      max-width="1200"
+      max-width="1000"
+      style="background-color: rgba(255,255,255,0.8);"
       v-for="(article, idx) in articles" :key="idx"
     >
       <div class="title">
         {{article[0]}}
       </div>
-      <div>{{article[1]}}</div>
+      <v-divider></v-divider>
+      <div class="mt-5">{{article[1]}}</div>
     </v-alert>
 
     <v-row
@@ -56,7 +58,6 @@ import ContentService from '../axios/contentService'
 
 @Component
 export default class Description extends Vue {
-    // 페이지 생성 시 DB에서 최상위, 최하위에 해당하는 대표 이미지와 설명들을 가져옴
     image = "";
     articles: [string, string][] = [];
     curUrlName = this.$route.name;

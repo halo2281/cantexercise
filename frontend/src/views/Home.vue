@@ -56,7 +56,6 @@ export default class Home extends Vue {
   nextUrl = "/main/"
 
   async mounted(){
-    //location.reload(true);
     const user = JSON.parse(localStorage.getItem('user'));
 
     const book: AxiosResponse<[]> = await ContentService.getBook(user)
@@ -70,9 +69,6 @@ export default class Home extends Vue {
                             mainUnit.data[i].title, 
                             mainUnit.data[i].mainUnitId]) 
     }
-
-    //console.log(this.articles);
-
   }
 }
 </script>

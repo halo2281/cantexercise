@@ -73,7 +73,7 @@ export default class Score extends Vue {
   contentId = this.$route.params.contentId;
   testUrl = `/test/${this.exerciseId}/${this.contentId}`;
   practiceUrl = `/practice/${this.exerciseId}/${this.contentId}`;
-  homeUrl = "/"
+  homeUrl = "/home"
   score = this.$route.query.score;
 
   created(){

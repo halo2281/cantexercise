@@ -93,7 +93,7 @@ export default class SliderList extends Vue {
                                 primaryUnit.data[i].title, 
                                 primaryUnit.data[i].primaryId]) 
           }
-          console.log(this.articles);
+          //console.log(this.articles);
         
       } else if(this.depth == 2){
           const primaryUnit: AxiosResponse<[]> = await ContentService.getPrimaryUnitTitle(this.id)

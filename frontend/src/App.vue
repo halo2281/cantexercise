@@ -22,8 +22,5 @@ export default class Selection extends Vue {
 
   loggedIn = this.$store.state.auth.status.loggedIn
 
-  created(){
-    // console.log(this.$store.state.auth.status.loggedIn)
-  }
 }
 </script>

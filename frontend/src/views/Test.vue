@@ -41,7 +41,7 @@
         <v-btn
         class = "white--text"
         :class="stateColor[connectState]"
-        @click="IoTConnect"
+        @click="IoTConnect()"
         >
           {{connectStateMsg[connectState]}}
         </v-btn>
@@ -85,15 +85,25 @@
       class="mt-10 mr-auto ml-auto"
       border="left"
       colored-border
-      color="deep-purple accent-4"
+      color="rgb(102,51,0)"
       elevation="2"
       max-width="1000"
+      style="background-color: rgba(255,255,255,0.8);"
     >
       <div class="title">
         {{help.title}}
       </div>
       <v-divider></v-divider>
       <div class="mt-5">{{help.content}}</div>
+      <div class="mt-3">{{processingMsg}}</div>
+      <div v-if = "curActionNum > 0" class="mt-3">
+        <span
+         class="mr-3"
+         v-for="(content, idx) in contents" :key="idx"
+        >
+          {{content.msg}}
+        </span>
+      </div>
     </v-alert>
 
     <v-row
@@ -126,33 +136,31 @@ import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
 import ContentService from '../axios/contentService'
 import { io } from "socket.io-client"
+import {SOCKET_BASE_URL} from "../config/index"
 
 @Component
 export default class Test extends Vue {
-  // 페이지 생성 시 DB에서 가져와야되는 것 : 보여주는 이미지
-  // 장비 연결의 경우 착용 부위에 대한 설명도 필요
-  // 촬영되야 되는 이미지가 필요한 경우 컴포넌트를 하나 추가적으로 생성
-  // 자세 비교 시 진행에 맞춰 피드백도 가져와야 됨 -> 미정
 
   contents = [];
   help = {
     "title" : "",
     "content" : ""
   };
+  processingMsg = "";
   connectState = 0;
   testState = 0;
-  testBtnMsg = ""
+  testBtnMsg = "";
   totActionNum = 0;
   curActionNum = 0;
   iotNum = 0;
-  practiceStates = [];
   stateColor:string [] = ["grey lighten-1", "success", "error", "primary"]
-  connectStateMsg:string [] = ["연결 하기", "연결 중...", "연결 실패", "연결 성공"]
+  connectStateMsg:string [] = ["연결 확인", "연결 중...", "연결 실패", "연결 성공"]
   curUrlName = this.$route.name;
   prevUrl = "";
   nextUrl = "";
   camera = "";
-  socket = io('http://52.79.57.59:8083')
+  socket = io(SOCKET_BASE_URL)
+  scoreSum = 0;
 
   async created(){
     const exerciseId = this.$route.params.exerciseId;
@@ -172,17 +180,15 @@ export default class Test extends Vue {
       const tmp = {
           "image" : require(`@/assets/images/practice/${detail.data.detailId}_${i+1}.jpg`),
           "state" : 0,
+          "msg" : "",
+          "score" : 0,
       }
       this.contents.push(tmp);
     } 
 
     //console.log(this.contents)
-      
-    //this.images.push(require(`@/assets/images/detail/${detail.data.detailId}.jpg`))
-    //this.articles.push(["피드백","센서와 이미지를 통한 자세 비교 시 적절한 피드백 메세지 제공 예정"])
     this.help.title = "도움말"
-    this.help.content = "위의 실습 시작 버튼을 클릭하면 실습이 시작됩니다."
-
+    this.help.content = "위의 실습 시작 버튼을 클릭하면 실습이 시작됩니다. 실습이 완료되면 점수 페이지로 이동됩니다."
     this.testBtnMsg = "실습 시작" 
     }
 
@@ -197,7 +203,7 @@ export default class Test extends Vue {
 
       this.socket.on('sensorSTF', (data) =>{
         const ret = JSON.parse(data);
-        console.log(ret);
+        //console.log(ret);
 
         if(ret.success){
           if(ret.success == 1) this.connectState = 3;
@@ -205,24 +211,35 @@ export default class Test extends Vue {
         }
 
         if(ret.actnum){
+          this.contents[this.curActionNum-1].score = Math.round((parseFloat(ret.pitch)+parseFloat(ret.roll))/2 * 100)
           if(ret.ispass == 0){
             this.contents[ret.actnum].state = 2;
-            console.log("실패")
+            this.processingMsg = `동작 ${this.curActionNum}번이 맞지 않아요. 다시 한 번 해볼까요?`;
+            if(this.contents[this.curActionNum-1].score > 0){
+              this.contents[this.curActionNum-1].msg = `동작 ${this.curActionNum}번 점수 : 
+                                                      ${this.contents[this.curActionNum-1].score}점`
+            }
           } else if(ret.ispass == 1){
             this.contents[ret.actnum].state = 3;
-            console.log("성공")
+            this.scoreSum += this.contents[this.curActionNum-1].score;
+            console.log(this.scoreSum)
+            this.processingMsg = `동작 ${this.curActionNum}번이 맞았어요. 다음 동작을 해볼까요?`;
+            this.contents[this.curActionNum-1].msg = `동작 ${this.curActionNum}번 점수 : 
+                                                      ${this.contents[this.curActionNum-1].score}점`
           }
 
           if(ret.actnum == this.totActionNum-1 && ret.ispass == 1) {
             this.testState = 3;
             this.testBtnMsg = "실습 완료"
 
+            const totScore = Math.round(this.scoreSum / 3)
+            
             const exerciseId = this.$route.params.exerciseId;
             const contentId = this.$route.params.contentId;
-            location.href=`/score/${exerciseId}/${contentId}?score=90`
+            // 점수 계산 필요
+            location.href=`/score/${exerciseId}/${contentId}?score=${totScore}`
           }
-        }
-        
+        }  
       })
     }
 
@@ -237,10 +254,11 @@ export default class Test extends Vue {
 
     startTest(){
       const contentId = this.$route.params.contentId;
-      console.log("실습 시작");
+      //console.log("실습 시작");
       this.testState = 1;
       this.testBtnMsg = "실습 중..."
       //console.log(this.testState)
+      this.help.content = `위의 그림과 같이 순서대로 동작을 시도하면서 완료되면 다음 동작을 취해주세요`;
 
       this.socket.emit("sensorFTS", `${contentId}_20` )
     }

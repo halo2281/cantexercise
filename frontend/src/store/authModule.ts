@@ -22,10 +22,10 @@ const initState = user
           }
         );
       },
-    //   logout({ commit }) {
-    //     UserService.logout();
-    //     commit('logout');
-    //   },
+      logout({ commit }) {
+        UserService.logout();
+        commit('logout');
+      },
     //   register({ commit }, user) {
     //     return UserService.register(user).then(
     //       response => {
@@ -48,10 +48,10 @@ const initState = user
         state.status.loggedIn = false;
         state.user = null;
       },
-    //   logout(state) {
-    //     state.status.loggedIn = false;
-    //     state.user = null;
-    //   },
+      logout(state) {
+        state.status.loggedIn = false;
+        state.user = null;
+      },
     //   registerSuccess(state) {
     //     state.status.loggedIn = false;
     //   },

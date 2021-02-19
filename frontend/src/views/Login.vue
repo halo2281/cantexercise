@@ -88,10 +88,6 @@ export default class Login extends Vue {
     loading = false;
     message = ""
 
-    beforeCreate(){
-      // if(this.$store.state.auth.status.loggedIn) location.replace("/home");
-    }
-
     submit(){
       const user = { userId : `${this.id}`, password : `${this.password}`}
         this.$store.dispatch('auth/login', user).then(

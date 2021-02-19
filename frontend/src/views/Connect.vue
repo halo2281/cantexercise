@@ -1,6 +1,4 @@
 <template>
-  <!-- 소개, 가이드 페이지로 사용 -->
-  <!-- 장비 연결, 자세 연습, 실습 페이지로 사용 -->
   <v-container>
     <div 
     class="ml-auto mr-auto mt-10 d-flex justify-space-around align-center"
@@ -25,7 +23,7 @@
         <v-btn
         class = "white--text"
         :class="stateColor[connectState]"
-        @click="IoTConnect"
+        @click="IoTConnect()"
         >
           {{connectStateMsg[connectState]}}
         </v-btn>
@@ -46,10 +44,11 @@
       class="mt-10 mr-auto ml-auto"
       border="left"
       colored-border
-      color="deep-purple accent-4"
+      color="rgb(102,51,0)"
       elevation="2"
       max-width="1000"
       v-for="(article, idx) in articles" :key="idx"
+      style="background-color: rgba(255,255,255,0.8);"
     >
       <div class="title">
         {{article[0]}}
@@ -88,13 +87,10 @@ import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
 import ContentService from '../axios/contentService'
 import { io } from "socket.io-client"
+import {SOCKET_BASE_URL} from "../config/index"
 
 @Component
 export default class Test extends Vue {
-  // 페이지 생성 시 DB에서 가져와야되는 것 : 보여주는 이미지
-  // 장비 연결의 경우 착용 부위에 대한 설명도 필요
-  // 촬영되야 되는 이미지가 필요한 경우 컴포넌트를 하나 추가적으로 생성
-  // 자세 비교 시 진행에 맞춰 피드백도 가져와야 됨 -> 미정
 
   image = "";
   isStreaming = 0;
@@ -103,16 +99,12 @@ export default class Test extends Vue {
   connectState = 0;
   iotNum = 0;
   stateColor:string [] = ["grey lighten-1", "success", "error", "primary"]
-  connectStateMsg:string [] = ["연결 하기", "연결 중...", "연결 실패", "연결 성공"]
+  connectStateMsg:string [] = ["연결 확인", "연결 중...", "연결 실패", "연결 성공"]
   curUrlName = this.$route.name;
   prevUrl = "";
   nextUrl = "";
   camera = "";
-  socket = io('http://52.79.57.59:8083')
-
-  befroeCreate(){
-    console.log("beforeCreate")
-  }
+  socket = io(SOCKET_BASE_URL)
 
   async created(){
     const contentId = this.$route.params.contentId;
@@ -128,35 +120,28 @@ export default class Test extends Vue {
       
     this.articles.push(["장비 착용 방법", detail.data.iotManual]);
     this.image = require(`@/assets/images/connect/${detail.data.detailId}.jpg`)
- 
-    }
+  }
 
-    mounted(){
+  mounted(){
 
-      const contentId = this.$route.params.contentId;
+    const contentId = this.$route.params.contentId;
       
-      this.socket.emit("imageFTS", "start" )
+    this.socket.emit("imageFTS", "start" )
 
-      this.socket.on('imageSTF', (data) =>{
-          //console.log(data)
-          
-          this.camera = new TextDecoder("utf-8").decode(data);
-      })
+    this.socket.on('imageSTF', (data) =>{
+        //console.log(data)  
+        this.camera = new TextDecoder("utf-8").decode(data);
+    })
   
-      this.socket.on('sensorSTF', (data) =>{
-
-          const ret = JSON.parse(data);
-          console.log(ret);
-  
-          if(ret.success){
-            if(ret.success == 1) this.connectState = 3;
-            else if(ret.success == 0) this.connectState = 2;
-          }
-          // } else if(ret.actnum) {
-            
-          // }
-      })
-    }
+    this.socket.on('sensorSTF', (data) =>{
+      const ret = JSON.parse(data);
+      //console.log(ret);
+      if(ret.success){
+        if(ret.success == 1) this.connectState = 3;
+        else if(ret.success == 0) this.connectState = 2;
+      }
+    })
+  }
 
     IoTConnect(){
       const contentId = this.$route.params.contentId;
@@ -166,8 +151,6 @@ export default class Test extends Vue {
         this.socket.emit("sensorFTS", `${contentId}_0${i+1}` )
       }
     }
-
-    
 }
 
 </script>
