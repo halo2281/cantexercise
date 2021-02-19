@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DetailList {	
-	private Long detailId;
-	private String title;
-	private String guideImage;
-	private Long actionNum;
-	private Long iotNum;
-}	
+public class SchoolBookParam {
+	private String school;
+	private Long grade;
+}

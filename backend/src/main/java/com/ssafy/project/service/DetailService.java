@@ -32,10 +32,8 @@ public class DetailService {
 					e.getTip(),
 					e.getGuideImage(),
 					e.getIotManual(),
-					e.getIotManualImage(),
-					e.getIotWearImage(),
-					e.getIotExerciseImage(),
-					e.getIotPracticeImage()
+					e.getActionNum(),
+					e.getIotNum()
 				)));
 		
 		return result;
@@ -48,7 +46,9 @@ public class DetailService {
 		detailList.forEach(e -> result.add(new DetailList(
 					e.getDetailId(),
 					e.getTitle(),
-					e.getGuideImage()
+					e.getGuideImage(),
+					e.getActionNum(),
+					e.getIotNum()
 				)));
 		
 		return result;
@@ -67,10 +67,8 @@ public class DetailService {
 				unit.get().getTip(),
 				unit.get().getGuideImage(),
 				unit.get().getIotManual(),
-				unit.get().getIotManualImage(),
-				unit.get().getIotWearImage(),
-				unit.get().getIotExerciseImage(),
-				unit.get().getIotPracticeImage()
+				unit.get().getActionNum(),
+				unit.get().getIotNum()
 			);
 		
 		Optional<DetailResult> result = Optional.of(temp);
