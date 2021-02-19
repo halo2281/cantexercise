@@ -15,7 +15,6 @@
 <script lang="ts">
 import {Component, Vue, Watch} from 'vue-property-decorator'
 import SliderList from '@/components/SliderList.vue'
-import AxiosService from '../axios/index'
 import { component } from 'vue/types/umd';
 
 @Component({
@@ -27,7 +26,7 @@ export default class Selection extends Vue {
     // 페이지 생성 시 mainUnit(대단원)id 와 1단계라는 정보를 보냄
     // 상위 항목 중 하나가 선택되면 DB에서 하위 항목을 가져옴
     // 최하위 항목이 선택되었을 경우 가이드 페이지로 이동 -> /guide/운동id/항목id
-    image = "";
+    
     urlIds:number[] = []
     curUrlId = this.$route.params.exerciseId;
     totalDepth = 1;

@@ -19,6 +19,26 @@ public class DetailService {
 	@Autowired
 	DetailRepository repo;
 	
+	// 전체 테이블 조회
+	public List<DetailResult> findDetail(){		
+		List<Detail> detail = repo.findAll();
+		List<DetailResult> result = new ArrayList<>();
+		detail.forEach(e -> result.add(new DetailResult(
+					e.getDetailId(),
+					e.getUnit().getSubUnitId(),
+					e.getTitle(),
+					e.getPosture(),
+					e.getObjective(),
+					e.getTip(),
+					e.getGuideImage(),
+					e.getIotManual(),
+					e.getActionNum(),
+					e.getIotNum()
+				)));
+		
+		return result;
+	}
+	
 	// 소단원의 세부내용목록
 	public List<DetailList> findDetailList(Long unit){
 		List<Detail> detailList = repo.findByUnitOf(unit);
@@ -26,7 +46,9 @@ public class DetailService {
 		detailList.forEach(e -> result.add(new DetailList(
 					e.getDetailId(),
 					e.getTitle(),
-					e.getGuideImage()
+					e.getGuideImage(),
+					e.getActionNum(),
+					e.getIotNum()
 				)));
 		
 		return result;
@@ -45,10 +67,8 @@ public class DetailService {
 				unit.get().getTip(),
 				unit.get().getGuideImage(),
 				unit.get().getIotManual(),
-				unit.get().getIotManualImage(),
-				unit.get().getIotWearImage(),
-				unit.get().getIotExerciseImage(),
-				unit.get().getIotPracticeImage()
+				unit.get().getActionNum(),
+				unit.get().getIotNum()
 			);
 		
 		Optional<DetailResult> result = Optional.of(temp);

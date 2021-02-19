@@ -7,11 +7,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class User {
 
 	@Id
@@ -19,14 +24,23 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NonNull
 	private String loginId;    // 유저 아이디
+	@NonNull
 	private String password;   // 유저 비밀번호
+	@NonNull
 	private String email;      // 유저 이메일
+	@NonNull
 	private String school;     // 학교
-	private String userType;   // 유저 분류(1-교사, 2-학생)
+	@NonNull
+	private Long userType;     // 유저 분류(1-학생, 2-교사)
+	@NonNull
 	private Long grade;        // 학년
+	@NonNull
 	private Long height;       // 키
+	@NonNull
 	private Long armLength;    // 팔 길이
+	@NonNull
 	private Long legLength;    // 다리 길이
 
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.project.dto.MainUnitList;
 import com.ssafy.project.dto.MainUnitResult;
 import com.ssafy.project.dto.MainUnitTitle;
 import com.ssafy.project.service.MainUnitService;
@@ -29,12 +28,23 @@ public class MainUnitController {
 
 	// 전체 대단원 목록 조회
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<List<MainUnitList>> getMainUnitList() {
-		List<MainUnitList> list = service.findMainUnitList();
+	public ResponseEntity<List<MainUnitResult>> getMainUnitList() {
+		List<MainUnitResult> list = service.findMainUnitList();
 		if (list == null) {
-			return new ResponseEntity<List<MainUnitList>>(new ArrayList<MainUnitList>(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<MainUnitResult>>(new ArrayList<MainUnitResult>(), HttpStatus.NOT_FOUND);
 		} else {
-			return new ResponseEntity<List<MainUnitList>>(list, HttpStatus.OK);
+			return new ResponseEntity<List<MainUnitResult>>(list, HttpStatus.OK);
+		}
+	}
+	
+	// 해당 교과서(id)의 대단원 목록
+	@GetMapping(value="list/{bookId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<MainUnitResult>> getListofBook(@PathVariable("bookId") Long bookId) {
+		List<MainUnitResult> list = service.findListOfBook(bookId);
+		if (list == null) {
+			return new ResponseEntity<List<MainUnitResult>>(new ArrayList<MainUnitResult>(), HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<List<MainUnitResult>>(list, HttpStatus.OK);
 		}
 	}
 	
@@ -46,7 +56,7 @@ public class MainUnitController {
 
 	}
 	
-	// 해당 대단원 전체
+	// 대단원 조회
 	@GetMapping(value="/{mainId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<MainUnitResult> getMainUnit(@PathVariable("mainId") Long id) {
 		Optional<MainUnitResult> unit = service.findMainUnit(id);

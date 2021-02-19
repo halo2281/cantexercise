@@ -31,8 +31,6 @@ public class Detail {
 	private String tip;					// 고득점 팁
 	private String guideImage;			// 자세 이미지
 	private String iotManual;			// IoT 설정 메뉴얼
-	private String iotManualImage;		// IoT 설정 이미지
-	private String iotWearImage;
-	private String iotExerciseImage;
-	private String iotPracticeImage;
+	private Long actionNum;
+	private Long iotNum;
 }

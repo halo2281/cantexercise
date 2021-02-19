@@ -13,5 +13,6 @@ public class DetailList {
 	private Long detailId;
 	private String title;
 	private String guideImage;
-
+	private Long actionNum;
+	private Long iotNum;
 }	
