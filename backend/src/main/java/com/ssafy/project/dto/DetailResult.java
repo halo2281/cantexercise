@@ -9,17 +9,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DetailResult {
+public class DetailResult {	
+
+	private Long detailId;
 	
-	private Integer detailId;
+	private Long unit;
 	
-	private Integer unit;
-	
-	private String title;
-	private String posture;				// 소단원 이름
-	private String objective;			// 대표 이미지
-	private String tip;
-	private String guideImage;
-	private String iotManual;
-	private String iotImage;
+	private String title;				// 세부사항 이름
+	private String posture;				// 자세 설명
+	private String objective;			// 학습 목표
+	private String tip;					// 고득점 팁
+	private String guideImage;			// 자세 이미지
+	private String iotManual;			// IoT 설정 메뉴얼
+	private Long actionNum;
+	private Long iotNum;
+
 }	

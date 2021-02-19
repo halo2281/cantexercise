@@ -11,47 +11,45 @@
       <v-slide-item
         v-for="(article, idx) in articles"
         :key="idx"
-        v-slot="{ active }"
+
       >
         <div v-if= "depth < 3">
           <v-card 
-            :color="active ? undefined : 'grey'"
             class="ml-5 mr-5 mt-5"
-            height="250"
+            height="350"
             width="300"
+            style="background-color: rgb(201,167,139);"
             @click="sendSig(article[2])"
           >
-
-            <v-img
-             height="270"
-             :src='article[0]'
-             alt = "../assets/images/mainUnit/3.PNG"
-             class="balck--text align-end"
-            >
-              <v-card-title
-              >{{article[1]}}</v-card-title>
-            </v-img>
+            <v-row justify="center">
+              <img
+              class="mt-5"
+              height="270"
+              :src='article[0]'
+              contain
+              />
+            </v-row>
+            <v-card-subtitle class="white--text mt-3">{{article[1]}}</v-card-subtitle>
           </v-card>
         </div>
 
         <div v-else>
           <v-card 
-            :color="active ? undefined : 'grey'"
             class="ml-5 mr-5 mt-5"
-            height="250"
+            height="350"
             width="300"
-            :href = curUrl+article[2]
+            style="background-color: rgb(201,167,139);"
+            :href = nextUrl+article[2]
           >
-  
-            <v-img
-             height="270"
-             :src='article[0]'
-             alt = "../assets/images/mainUnit/3.PNG"
-             class="balck--text align-end"
-            >
-              <v-card-title
-              >{{article[1]}}</v-card-title>
-            </v-img>
+          <v-row justify="center">
+              <img
+              class="mt-5"
+              height="270"
+              :src='article[0]'
+              contain
+              />
+            </v-row>
+          <v-card-subtitle class="white--text mt-3">{{article[1]}}</v-card-subtitle>
           </v-card>
         </div>
 
@@ -62,8 +60,8 @@
 
 <script lang="ts">
 import {Component, Vue, Prop, Emit, Watch} from 'vue-property-decorator'
-import AxiosService from '../axios/index'
 import { AxiosResponse } from 'axios';
+import ContentService from '../axios/contentService'
 
 @Component
 export default class SliderList extends Vue {
@@ -72,17 +70,9 @@ export default class SliderList extends Vue {
 
   title = "";
   articles:[string, string, number][] = [];
-  curUrl = `/guide/${this.$route.params.exerciseId}/`
+  nextUrl = `/guide/${this.$route.params.exerciseId}/`
 
-  async mounted(){
-    //   props에서 받아온 아이디를 통해
-    //   console.log("id : "+this.id);
-    //   console.log("depth : "+this.depth);
-    //   console.log(this.isChange);
-    //   console.log(this.$route.params)
-      
-      //this.articles.push(["https://cdn.vuetifyjs.com/images/cards/cooking.png","제목"+this.index++])
-  
+  mounted(){
      this.getData();
   }
 
@@ -93,74 +83,48 @@ export default class SliderList extends Vue {
 
   async getData(){
       if(this.depth == 1){
-          const primaryUnit: AxiosResponse<[]> = await AxiosService.instance.get('/primaryUnit.json');
-          const mainUnit: AxiosResponse<[]> = await AxiosService.instance.get('/mainUnit.json')
-          for(const i in mainUnit.data){
-              //console.log(mainUnit.data[i])
-              if(mainUnit.data[i].mainUnitId == this.id){
-                  this.title = mainUnit.data[i].title;
-              }
-          }
-          
-          for(const i in primaryUnit.data){
-              if(primaryUnit.data[i].main == this.id){
-                this.articles.push([ require(`@/assets/images/primaryUnit/${primaryUnit.data[i].priUnitId}.jpg`) , 
-                                  primaryUnit.data[i].title, 
-                                  primaryUnit.data[i].priUnitId])
-              }  
-          }
+          const primaryUnit: AxiosResponse<[]> = await ContentService.getPrimaryUnitList(this.id);
+          const mainUnit: AxiosResponse<[]> = await ContentService.getMainUnitTitle(this.id)
 
-          console.log(this.articles);
-          
-          // mainUnit(대단원) id를 사용하여 primaryUnit(중단원) 테이블의 아이디, 이미지와 제목을 가져옴
-          // mainUnit(대단원) id를 사용하여 mainUnit(대단원) 제목을 가져옴
-      } else if(this.depth == 2){
-          const primaryUnit: AxiosResponse<[]> = await AxiosService.instance.get('/primaryUnit.json');
-          const subUnit: AxiosResponse<[]> = await AxiosService.instance.get('/subUnit.json')
+          this.title = mainUnit.data.title
+
           for(const i in primaryUnit.data){
-              //console.log(mainUnit.data[i])
-              if(primaryUnit.data[i].priUnitId == this.id){
-                  this.title = primaryUnit.data[i].title;
-              }
+            this.articles.push([ require(`@/assets/images/primaryUnit/${primaryUnit.data[i].primaryId}.jpg`) , 
+                                primaryUnit.data[i].title, 
+                                primaryUnit.data[i].primaryId]) 
           }
+          //console.log(this.articles);
+        
+      } else if(this.depth == 2){
+          const primaryUnit: AxiosResponse<[]> = await ContentService.getPrimaryUnitTitle(this.id)
+          const subUnit: AxiosResponse<[]> = await ContentService.getSubUnitList(this.id)
+
+          this.title = primaryUnit.data.title;
           
           this.articles.length = 0;
           for(const i in subUnit.data){
-              if(subUnit.data[i].primarys == this.id){
-              this.articles.push([require(`@/assets/images/subUnit/${subUnit.data[i].subUnitId}.jpg`), 
+              this.articles.push([require(`@/assets/images/subUnit/${subUnit.data[i].subId}.jpg`), 
                                   subUnit.data[i].title, 
-                                  subUnit.data[i].subUnitId])
-              }
+                                  subUnit.data[i].subId])
           }
-          // primaryUnit(중단원) id를 사용하여 subUnit(소단원) 테이블의 아이디, 이미지와 제목을 가져옴
-          // primaryUnit(중단원) id를 사용하여 primaryUnit(중단원) 제목을 가져옴
+         
       } else if(this.depth == 3){
-          const detail: AxiosResponse<[]> = await AxiosService.instance.get('/detail.json');
-          const subUnit: AxiosResponse<[]> = await AxiosService.instance.get('/subUnit.json')
-          for(const i in subUnit.data){
-              //console.log(mainUnit.data[i])
-              if(subUnit.data[i].subUnitId == this.id){
-                  this.title = subUnit.data[i].title;
-              }
-          }
+          const detail: AxiosResponse<[]> = await ContentService.getDetailList(this.id);
+          const subUnit: AxiosResponse<[]> = await ContentService.getSubUnitTitle(this.id);
+          
+          this.title = subUnit.data.title;
           
           this.articles.length = 0;
           for(const i in detail.data){
-              if(detail.data[i].unit == this.id){
               this.articles.push([ require(`@/assets/images/detail/${detail.data[i].detailId}.jpg`), 
                                   detail.data[i].title, 
                                   detail.data[i].detailId])
-              }
           }
-          // subUnit(소단원) id를 사용하여 detail(세부사항) 테이블의 아이디, 이미지와 제목을 가져옴
-          // subUnit(소단원) id를 사용하여 subUnit(소단원) 제목을 가져옴
       }
   }
 
   async sendSig(id){
-    //   console.log(this.depth);
-    //   console.log(event.path[1].innerText)
-      
+    //   console.log(this.depth); 
       if(this.depth == 3){
           // router를 이용하여 /guide/exerciseId/contetnId로 이동 
           const exerciseId = this.$route.params.exerciseId;

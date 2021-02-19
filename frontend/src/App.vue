@@ -1,7 +1,9 @@
 <template>
   <v-app>
+    <div v-if = 'loggedIn'>
     <Header></Header>
-    <v-main>
+    </div>
+    <v-main style="background-color: rgba(201,167,139,0.7);">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -11,13 +13,14 @@
 import { Component, Vue } from "vue-property-decorator";
 import Header from "@/components/Header.vue";
 
-export default Vue.extend({
-  name: "App",
-
+@Component({
   components: {
     Header
-  },
+  }
+})
+export default class Selection extends Vue {
 
-  data: () => ({})
-});
+  loggedIn = this.$store.state.auth.status.loggedIn
+
+}
 </script>

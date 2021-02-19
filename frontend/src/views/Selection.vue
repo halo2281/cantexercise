@@ -15,7 +15,6 @@
 <script lang="ts">
 import {Component, Vue, Watch} from 'vue-property-decorator'
 import SliderList from '@/components/SliderList.vue'
-import AxiosService from '../axios/index'
 import { component } from 'vue/types/umd';
 
 @Component({
@@ -27,7 +26,7 @@ export default class Selection extends Vue {
     // 페이지 생성 시 mainUnit(대단원)id 와 1단계라는 정보를 보냄
     // 상위 항목 중 하나가 선택되면 DB에서 하위 항목을 가져옴
     // 최하위 항목이 선택되었을 경우 가이드 페이지로 이동 -> /guide/운동id/항목id
-    image = "";
+    
     urlIds:number[] = []
     curUrlId = this.$route.params.exerciseId;
     totalDepth = 1;
@@ -35,14 +34,10 @@ export default class Selection extends Vue {
     async created(){
       //console.log(this.$route.params.exerciseId);
       this.urlIds.push(parseInt(this.$route.params.exerciseId));
-      //console.log(this.urlIds)
-      // axios에서 대표 이미지와 설명글들 가져오는 부분 구현 필요   
+      //console.log(this.urlIds) 
     }
 
     confirmDepth(depth, id){
-      // console.log("클릭된 depth : "+ depth );
-      // console.log(id);
-      // console.log("전체 depth : "+ this.totalDepth);
       if(depth == this.totalDepth) {
         this.totalDepth++;
         this.urlIds.push(id);
@@ -51,11 +46,9 @@ export default class Selection extends Vue {
         this.totalDepth = depth+1;
         // console.log(this.urlIds.length)
         while(this.urlIds.length > depth) this.urlIds.pop();
-        // console.log(this.urlIds);
         this.urlIds.push(id);
-        console.log(this.urlIds);
+        //console.log(this.urlIds);
       }
-      console.log("변화된 전체 depth : "+ this.totalDepth);
     }
     
 }

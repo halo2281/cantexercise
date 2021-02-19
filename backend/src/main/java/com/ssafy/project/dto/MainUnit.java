@@ -19,7 +19,7 @@ public class MainUnit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer mainUnitId;
+	private Long mainUnitId;
 	
 	@ManyToOne
 	@JoinColumn(name = "book")

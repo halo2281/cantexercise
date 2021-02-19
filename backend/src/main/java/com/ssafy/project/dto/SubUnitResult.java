@@ -10,10 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubUnitResult {
-	
-	private Integer subUnitId;
-	
-	private Integer primarys;
+
+	private Long subUnitId;
+
+	private Long primarys;
 	
 	private String title;
 	private String image;

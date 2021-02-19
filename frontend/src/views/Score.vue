@@ -12,7 +12,7 @@
     <div 
      class="text-h1 mt-10 mr-auto ml-auto text-center blue--text font-weight-black"
     >
-      85점
+      {{score}}점
     </div>
 
     <div 
@@ -73,7 +73,12 @@ export default class Score extends Vue {
   contentId = this.$route.params.contentId;
   testUrl = `/test/${this.exerciseId}/${this.contentId}`;
   practiceUrl = `/practice/${this.exerciseId}/${this.contentId}`;
-  homeUrl = "/"
+  homeUrl = "/home"
+  score = this.$route.query.score;
+
+  created(){
+    //console.log(this.$route.query);
+  }
 
 
 }
